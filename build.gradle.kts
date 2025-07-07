@@ -27,7 +27,7 @@ repositories {
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
 
-    implementation("me.drownek:light-platform-bukkit:2.0")
+    implementation("com.github.Drownek:light-platform:2.0.1")
 
     /* lombok */
     val lombok = "1.18.32"

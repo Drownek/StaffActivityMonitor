@@ -4,7 +4,7 @@ import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 import me.drownek.platform.bukkit.commands.LiteCommandsConfig;
 import me.drownek.platform.core.annotation.Configuration;
-import me.drownek.util.SendableMessage;
+import me.drownek.util.message.SendableMessage;
 
 @SuppressWarnings("CanBeFinal")
 @Configuration(path = "messages.{ext}")

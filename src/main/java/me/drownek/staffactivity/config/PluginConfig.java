@@ -5,9 +5,9 @@ import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 import me.drownek.platform.core.annotation.Configuration;
 import me.drownek.util.DataItemStack;
-import me.drownek.util.GuiItemInfo;
 import me.drownek.util.ItemStackBuilder;
-import me.drownek.util.PaginatedGuiSettings;
+import me.drownek.util.gui.GuiItemInfo;
+import me.drownek.util.gui.PaginatedGuiSettings;
 import org.bukkit.Material;
 
 import java.util.List;

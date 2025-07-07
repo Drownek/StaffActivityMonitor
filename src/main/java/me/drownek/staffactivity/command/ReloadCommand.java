@@ -11,7 +11,6 @@ import eu.okaeri.injector.annotation.Inject;
 import me.drownek.platform.bukkit.LightBukkitPlugin;
 import me.drownek.staffactivity.StaffActivityPlugin;
 import me.drownek.staffactivity.config.Messages;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.logging.Level;
@@ -24,13 +23,15 @@ public class ReloadCommand {
     private @Inject OkaeriInjector injector;
     private @Inject StaffActivityPlugin plugin;
     private @Inject LightBukkitPlugin lightBukkitPlugin;
-    private @Inject LiteCommands<CommandSender> commands;
 
     @Execute
     void handle(@Context Player player) {
         try {
             injector.streamOf(OkaeriConfig.class).forEach(OkaeriConfig::load);
-            messages.liteCommandsConfig.apply(commands);
+            //noinspection unchecked
+            injector.get("commands", LiteCommands.class).ifPresent(
+                commands -> messages.liteCommandsConfig.apply(commands)
+            );
             messages.configReloaded.sendTo(player);
         } catch (Exception e) {
             messages.configReloadFail.sendTo(player);

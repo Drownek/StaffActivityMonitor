@@ -1,4 +1,6 @@
 # StaffActivityMonitor
+[![Modrinth](https://img.shields.io/badge/Available_on-Modrinth-light_green)](https://modrinth.com/plugin/staffactivitymonitor/) [![SpigotMC](https://img.shields.io/badge/Available_on-SpigotMC-orange)](https://www.spigotmc.org/resources/staffactivitymonitor.126807/)
+
 A simple, efficient, and highly customizable Bukkit plugin for tracking staff activity.
 
 ## Usage

@@ -1,7 +1,10 @@
+import xyz.jpenilla.runpaper.task.RunServer
+
 plugins {
     id("java")
     id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
     id("com.gradleup.shadow") version "9.0.0-beta12"
+    id("xyz.jpenilla.run-paper") version "2.3.1"
 }
 
 group = "me.drownek"
@@ -72,4 +75,34 @@ java {
 tasks.withType<JavaCompile> {
     options.compilerArgs.add("-parameters")
     options.encoding = "UTF-8"
+}
+
+val runVersions = mapOf(
+    "1.8.8" to 21,
+    "1.19.4" to 21,
+    "1.21.5" to 21,
+)
+
+tasks {
+    runServer {
+        minecraftVersion(runVersions.keys.last())
+        jvmArgs("-Dcom.mojang.eula.agree=true")
+        val toolchains = project.extensions.getByType<JavaToolchainService>()
+        javaLauncher.set(toolchains.launcherFor {
+            languageVersion.set(JavaLanguageVersion.of(runVersions.values.last()))
+        })
+    }
+    runVersions.entries.take(runVersions.size - 1).forEach { entry ->
+        val n = entry.key.replace(".", "_")
+        register("run$n", RunServer::class) {
+            minecraftVersion(entry.key)
+            jvmArgs("-Dcom.mojang.eula.agree=true")
+            runDirectory.set(layout.projectDirectory.dir("run$n"))
+            pluginJars.from(shadowJar.flatMap { it.archiveFile })
+            val toolchains = project.extensions.getByType<JavaToolchainService>()
+            javaLauncher.set(toolchains.launcherFor {
+                languageVersion.set(JavaLanguageVersion.of(entry.value))
+            })
+        }
+    }
 }

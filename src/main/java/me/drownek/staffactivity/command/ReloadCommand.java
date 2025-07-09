@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 
 import java.util.logging.Level;
 
-@Command(name = "staffactivity reload")
+@Command(name = "staffactivity")
 @Permission("staffactivity.commands")
 public class ReloadCommand {
 
@@ -24,8 +24,8 @@ public class ReloadCommand {
     private @Inject StaffActivityPlugin plugin;
     private @Inject LightBukkitPlugin lightBukkitPlugin;
 
-    @Execute
-    void handle(@Context Player player) {
+    @Execute(name = "reload")
+    void reload(@Context Player player) {
         try {
             injector.streamOf(OkaeriConfig.class).forEach(OkaeriConfig::load);
             //noinspection unchecked

@@ -1,6 +1,26 @@
 # StaffActivityMonitor
 A simple, efficient, and highly customizable Bukkit plugin for tracking staff activity.
 
+## Usage
+All players with permission `staffactivity.staff` are tracked by the plugin.
+That includes messages/commands sent and times at which the player was online.
+
+## Commands
+
+`/staffactivity top` - Opens the activity top GUI showing staff activity rankings
+
+`/staffactivity view` - Opens the activity list GUI showing all staff activities
+
+`/staffactivity view <player>` - Opens the activity view for a specific player
+
+`/staffactivity reload` - Reloads the plugin configuration files  
+
+## Permissions
+
+`staffactivity.staff` - Required permission for the plugin to track staff members
+
+`staffactivity.commands` - Required permission to use all plugin commands
+
 ## Libraries used
 
 - [light-platform](https://github.com/Drownek/light-platform)

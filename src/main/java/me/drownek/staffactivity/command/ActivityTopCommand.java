@@ -9,15 +9,15 @@ import eu.okaeri.tasker.bukkit.BukkitTasker;
 import me.drownek.staffactivity.gui.ActivityTopGui;
 import org.bukkit.entity.Player;
 
-@Command(name = "staffactivity top")
+@Command(name = "staffactivity")
 @Permission("staffactivity.commands")
 public class ActivityTopCommand {
 
     private @Inject BukkitTasker tasker;
     private @Inject ActivityTopGui activityTopGui;
 
-    @Execute
-    void view(@Context Player player) {
+    @Execute(name = "top")
+    void top(@Context Player player) {
         activityTopGui.openActivityTopGui(player);
     }
 }

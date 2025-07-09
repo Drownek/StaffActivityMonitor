@@ -11,19 +11,19 @@ import me.drownek.staffactivity.data.activity.ActivityPlayer;
 import me.drownek.staffactivity.gui.ActivityViewGui;
 import org.bukkit.entity.Player;
 
-@Command(name = "staffactivity view")
+@Command(name = "staffactivity")
 @Permission("staffactivity.commands")
 public class ActivityViewCommand {
 
     private @Inject BukkitTasker tasker;
     private @Inject ActivityViewGui activityViewGui;
 
-    @Execute
+    @Execute(name = "view")
     void view(@Context Player player) {
         activityViewGui.openActivityListGui(player);
     }
 
-    @Execute
+    @Execute(name = "view")
     void view(@Context Player player, @Arg ActivityPlayer activityPlayer) {
         activityViewGui.openActivityViewForPlayer(player, activityPlayer, null);
     }

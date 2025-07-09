@@ -1,4 +1,5 @@
 import xyz.jpenilla.runpaper.task.RunServer
+import java.util.Properties
 
 plugins {
     id("java")
@@ -78,31 +79,58 @@ tasks.withType<JavaCompile> {
 }
 
 val runVersions = mapOf(
-    "1.8.8" to 21,
-    "1.19.4" to 21,
+    "1.8.8" to 16,
+    "1.16.5" to 16,
+    "1.18.2" to 17,
+    "1.19.4" to 19,
+    "1.20.6" to 21,
     "1.21.5" to 21,
+    "1.21.6" to 21,
+    "1.21.7" to 21,
 )
 
 tasks {
-    runServer {
-        minecraftVersion(runVersions.keys.last())
-        jvmArgs("-Dcom.mojang.eula.agree=true")
-        val toolchains = project.extensions.getByType<JavaToolchainService>()
-        javaLauncher.set(toolchains.launcherFor {
-            languageVersion.set(JavaLanguageVersion.of(runVersions.values.last()))
-        })
-    }
-    runVersions.entries.take(runVersions.size - 1).forEach { entry ->
-        val n = entry.key.replace(".", "_")
+    runVersions.forEach { key, value ->
+        val n = key.replace(".", "_")
         register("run$n", RunServer::class) {
-            minecraftVersion(entry.key)
+            minecraftVersion(key)
+
+            /* Automatically accept EULA */
             jvmArgs("-Dcom.mojang.eula.agree=true")
-            runDirectory.set(layout.projectDirectory.dir("run$n"))
+
+            val runDir = layout.projectDirectory.dir("run$n")
+            runDirectory.set(runDir)
             pluginJars.from(shadowJar.flatMap { it.archiveFile })
+
+            /* Start server with specified Java version */
             val toolchains = project.extensions.getByType<JavaToolchainService>()
             javaLauncher.set(toolchains.launcherFor {
-                languageVersion.set(JavaLanguageVersion.of(entry.value))
+                languageVersion.set(JavaLanguageVersion.of(value))
             })
+
+            /* Assign random port for multiple instances at the same time */
+            doFirst {
+                val runDirFile = runDir.asFile
+                if (!runDirFile.exists()) {
+                    runDirFile.mkdirs()
+                }
+
+                val serverPropertiesFile = runDirFile.resolve("server.properties")
+                if (!serverPropertiesFile.exists()) {
+                    serverPropertiesFile.createNewFile()
+                }
+
+                val props = Properties().apply {
+                    serverPropertiesFile.inputStream().use { load(it) }
+                }
+
+                val randomPort = (20000..40000).random()
+                props["server-port"] = randomPort.toString()
+
+                serverPropertiesFile.outputStream().use { props.store(it, null) }
+
+                println(">> Starting server $key on port $randomPort")
+            }
         }
     }
 }

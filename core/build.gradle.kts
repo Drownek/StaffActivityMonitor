@@ -1,6 +1,4 @@
 dependencies {
-    compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
-
     implementation("eu.okaeri:okaeri-configs-json-simple:5.0.9")
     implementation("eu.okaeri:okaeri-persistence-jdbc:3.0.1-beta.3")
     implementation("org.mariadb.jdbc:mariadb-java-client:2.7.3")

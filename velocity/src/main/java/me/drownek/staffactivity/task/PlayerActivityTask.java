@@ -1,47 +1,50 @@
 package me.drownek.staffactivity.task;
 
+import com.velocitypowered.api.proxy.Player;
+import com.velocitypowered.api.proxy.ProxyServer;
 import eu.okaeri.injector.annotation.Inject;
-import me.drownek.platform.bukkit.annotation.Scheduled;
-import me.drownek.platform.bukkit.scheduler.PlatformScheduler;
-import me.drownek.staffactivity.config.PluginConfig;
+import eu.okaeri.platform.velocity.annotation.Scheduled;
+import eu.okaeri.platform.velocity.scheduler.PlatformScheduler;
+import me.drownek.staffactivity.PluginConfig;
 import me.drownek.staffactivity.core.ActivityEntry;
 import me.drownek.staffactivity.core.ActivityPlayer;
 import me.drownek.staffactivity.data.activity.ActivityPlayerRepository;
 import me.drownek.staffactivity.data.activity.ActivityPlayerService;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 import java.time.Instant;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Using task instead of listeners to handle the situation where the player was given a permission
  * after joining the server to record activity from moment he got the permission,
  * not at his second join.
  */
-@Scheduled(rate = 20, async = true)
+@Scheduled(rate = 1, timeUnit = TimeUnit.SECONDS)
 public class PlayerActivityTask implements Runnable {
 
     private @Inject ActivityPlayerRepository repository;
     private @Inject ActivityPlayerService activityPlayerService;
     private @Inject PluginConfig config;
     private @Inject PlatformScheduler scheduler;
+    private @Inject ProxyServer proxy;
 
     @Override
     public void run() {
-        if (config.proxyMode) {
-            return;
+        for (Player player : proxy.getAllPlayers()) {
+            if (player.hasPermission(config.staffPermission) && !repository.existsByPath(player.getUniqueId())) {
+                repository.findOrCreateByPath(player.getUniqueId());
+            }
         }
 
-        for (OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers()) {
-            processPlayer(offlinePlayer);
+        for (ActivityPlayer user : repository.findAll()) {
+            processPlayer(user);
         }
     }
 
-    private void processPlayer(OfflinePlayer offlinePlayer) {
-        ActivityPlayer user = repository.getUser(offlinePlayer);
+    private void processPlayer(ActivityPlayer user) {
         ActivityEntry uncompletedEntry = activityPlayerService.getUncompletedActivityEntry(user).orElse(null);
-        Player player = offlinePlayer.getPlayer();
+
+        var player = proxy.getPlayer(user.getUuid()).orElse(null);
 
         if (player != null && player.hasPermission(config.staffPermission)) {
             handleOnlinePlayer(user, uncompletedEntry);

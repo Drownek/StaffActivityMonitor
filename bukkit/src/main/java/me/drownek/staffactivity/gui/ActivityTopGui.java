@@ -6,7 +6,7 @@ import eu.okaeri.injector.annotation.Inject;
 import me.drownek.platform.bukkit.scheduler.PlatformScheduler;
 import me.drownek.platform.core.annotation.Component;
 import me.drownek.staffactivity.config.PluginConfig;
-import me.drownek.staffactivity.data.activity.ActivityPlayer;
+import me.drownek.staffactivity.core.ActivityPlayer;
 import me.drownek.staffactivity.data.activity.ActivityPlayerRepository;
 import me.drownek.staffactivity.data.activity.ActivityPlayerService;
 import me.drownek.util.TimeUtil;

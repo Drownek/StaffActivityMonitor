@@ -1,4 +1,4 @@
-package me.drownek.staffactivity.data.action;
+package me.drownek.staffactivity.core.action;
 
 public enum ActionType {
     MESSAGE, COMMAND

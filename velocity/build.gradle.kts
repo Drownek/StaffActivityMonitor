@@ -3,14 +3,15 @@ plugins {
     id("xyz.jpenilla.run-velocity") version "2.3.1"
 }
 
-repositories {
-    maven("https://jitpack.io")
-    maven("https://repo.papermc.io/repository/maven-public/")
-}
-
 dependencies {
+    implementation(project(":core"))
+
     compileOnly("com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
     annotationProcessor("com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
+
+    implementation("eu.okaeri:okaeri-configs-json-simple:5.0.9")
+    implementation("eu.okaeri:okaeri-persistence-jdbc:3.0.1-beta.3")
+    implementation("org.mariadb.jdbc:mariadb-java-client:2.7.3")
 
     implementation("com.github.Drownek.light-platform:velocity:2.0.2")
 
@@ -47,5 +48,11 @@ tasks.shadowJar {
 tasks {
     runVelocity {
         velocityVersion("3.3.0-SNAPSHOT")
+    }
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }

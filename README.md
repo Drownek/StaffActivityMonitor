@@ -23,6 +23,13 @@ That includes messages/commands sent and times at which the player was online.
 
 `staffactivity.commands` - Required permission to use all plugin commands
 
+## Installation for proxy servers (Currently only Velocity)
+* Install a Bukkit version on all non-proxy servers you wish to see staff data
+  * enable proxyMode in config, and set up the database as MYSQL
+* Install a Velocity version on a proxy server
+  * configure it to use the same database as non-proxy servers
+* Now, proxy server will track staff data, and non-proxy servers will be able to show it through gui
+
 ## Libraries used
 
 - [light-platform](https://github.com/Drownek/light-platform)

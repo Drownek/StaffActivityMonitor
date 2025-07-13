@@ -1,19 +1,18 @@
 package me.drownek.staffactivity.listener;
 
+import com.velocitypowered.api.event.Subscribe;
+import com.velocitypowered.api.event.player.PlayerChatEvent;
+import com.velocitypowered.api.proxy.Player;
 import eu.okaeri.injector.annotation.Inject;
-import me.drownek.platform.bukkit.scheduler.PlatformScheduler;
+import eu.okaeri.platform.velocity.component.type.listener.Listener;
+import eu.okaeri.platform.velocity.scheduler.PlatformScheduler;
 import me.drownek.platform.core.annotation.Component;
-import me.drownek.staffactivity.config.PluginConfig;
+import me.drownek.staffactivity.PluginConfig;
 import me.drownek.staffactivity.core.ActivityPlayer;
 import me.drownek.staffactivity.core.action.Action;
 import me.drownek.staffactivity.core.action.ActionType;
 import me.drownek.staffactivity.data.activity.ActivityPlayerRepository;
 import me.drownek.staffactivity.data.activity.ActivityPlayerService;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.time.Instant;
 
@@ -25,12 +24,8 @@ public class PlayerChatListener implements Listener {
     private @Inject ActivityPlayerRepository repository;
     private @Inject PlatformScheduler scheduler;
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    void handle(AsyncPlayerChatEvent event) {
-        if (config.proxyMode) {
-            return;
-        }
-
+    @Subscribe
+    void handle(PlayerChatEvent event) {
         Player player = event.getPlayer();
 
         if (!player.hasPermission(config.staffPermission)) {

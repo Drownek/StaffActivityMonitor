@@ -1,9 +1,9 @@
-package me.drownek.staffactivity.data.activity;
+package me.drownek.staffactivity.core;
 
 import eu.okaeri.persistence.document.Document;
 import lombok.Getter;
 import lombok.Setter;
-import me.drownek.staffactivity.data.action.Action;
+import me.drownek.staffactivity.core.action.Action;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -14,7 +14,7 @@ import java.util.Map;
 public class ActivityEntry extends Document {
     private Instant startTime;
     private Instant endTime;
-    private Map<Instant, Action> actions;
+    private Map<Long, Action> actions;
 
     public ActivityEntry(Instant startTime) {
         this.startTime = startTime;

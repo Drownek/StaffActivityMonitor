@@ -7,10 +7,10 @@ import eu.okaeri.injector.annotation.Inject;
 import me.drownek.platform.bukkit.scheduler.PlatformScheduler;
 import me.drownek.platform.core.annotation.Component;
 import me.drownek.staffactivity.config.PluginConfig;
-import me.drownek.staffactivity.data.action.Action;
-import me.drownek.staffactivity.data.action.ActionType;
-import me.drownek.staffactivity.data.activity.ActivityEntry;
-import me.drownek.staffactivity.data.activity.ActivityPlayer;
+import me.drownek.staffactivity.core.ActivityEntry;
+import me.drownek.staffactivity.core.ActivityPlayer;
+import me.drownek.staffactivity.core.action.Action;
+import me.drownek.staffactivity.core.action.ActionType;
 import me.drownek.staffactivity.data.activity.ActivityPlayerRepository;
 import me.drownek.util.TimeUtil;
 import org.bukkit.Bukkit;
@@ -73,7 +73,7 @@ public class ActivityViewGui {
             Instant endTimestamp = activityEntry.getEndTime();
             var endTime = endTimestamp == null ? "now" : TimeUtil.formatTimeMillisToDate(endTimestamp.toEpochMilli());
 
-            Map<Instant, Action> actions = activityEntry.getActions();
+            Map<Long, Action> actions = activityEntry.getActions();
             long commandCount = actions.values().stream()
                 .filter(action -> action.getType().equals(ActionType.COMMAND))
                 .count();
@@ -102,7 +102,7 @@ public class ActivityViewGui {
         gui.open(player);
     }
 
-    private void openViewMoreGui(HumanEntity player, ActivityPlayer activityPlayer, Consumer<HumanEntity> closeAction, boolean oldestToNewest, Map<Instant, Action> actions) {
+    private void openViewMoreGui(HumanEntity player, ActivityPlayer activityPlayer, Consumer<HumanEntity> closeAction, boolean oldestToNewest, Map<Long, Action> actions) {
         PaginatedGui viewMoreGui = config.viewGuiPlayerMore
             .closeAction(humanEntity ->
                 openActivityViewForPlayer(humanEntity, activityPlayer, closeAction, oldestToNewest)

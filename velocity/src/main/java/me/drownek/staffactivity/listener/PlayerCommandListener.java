@@ -1,37 +1,34 @@
 package me.drownek.staffactivity.listener;
 
+import com.velocitypowered.api.event.Subscribe;
+import com.velocitypowered.api.event.command.CommandExecuteEvent;
+import com.velocitypowered.api.proxy.Player;
 import eu.okaeri.injector.annotation.Inject;
-import me.drownek.platform.bukkit.scheduler.PlatformScheduler;
+import eu.okaeri.platform.velocity.component.type.listener.Listener;
+import eu.okaeri.platform.velocity.scheduler.PlatformScheduler;
 import me.drownek.platform.core.annotation.Component;
-import me.drownek.staffactivity.config.PluginConfig;
+import me.drownek.staffactivity.PluginConfig;
 import me.drownek.staffactivity.core.ActivityPlayer;
 import me.drownek.staffactivity.core.action.Action;
 import me.drownek.staffactivity.core.action.ActionType;
 import me.drownek.staffactivity.data.activity.ActivityPlayerRepository;
 import me.drownek.staffactivity.data.activity.ActivityPlayerService;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.time.Instant;
 
 @Component
-public class PlayerChatListener implements Listener {
+public class PlayerCommandListener implements Listener {
 
     private @Inject PluginConfig config;
-    private @Inject ActivityPlayerService activityPlayerService;
     private @Inject ActivityPlayerRepository repository;
     private @Inject PlatformScheduler scheduler;
+    private @Inject ActivityPlayerService activityPlayerService;
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    void handle(AsyncPlayerChatEvent event) {
-        if (config.proxyMode) {
+    @Subscribe
+    void handle(CommandExecuteEvent event) {
+        if (!(event.getCommandSource() instanceof Player player)) {
             return;
         }
-
-        Player player = event.getPlayer();
 
         if (!player.hasPermission(config.staffPermission)) {
             return;
@@ -40,8 +37,7 @@ public class PlayerChatListener implements Listener {
         scheduler.runAsync(() -> {
             ActivityPlayer user = repository.getUser(player);
             activityPlayerService.getUncompletedActivityEntry(user).ifPresent(activityEntry -> {
-                String message = event.getMessage();
-                activityEntry.getActions().put(Instant.now().toEpochMilli(), new Action(ActionType.MESSAGE, message));
+                activityEntry.getActions().put(Instant.now().toEpochMilli(), new Action(ActionType.COMMAND, event.getCommand()));
                 user.save();
             });
         });

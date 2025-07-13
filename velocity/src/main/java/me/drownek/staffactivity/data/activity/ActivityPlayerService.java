@@ -1,14 +1,13 @@
 package me.drownek.staffactivity.data.activity;
 
+import com.velocitypowered.api.proxy.InboundConnection;
+import com.velocitypowered.api.proxy.ProxyServer;
 import eu.okaeri.injector.annotation.Inject;
 import me.drownek.platform.core.annotation.Component;
-import me.drownek.staffactivity.config.PluginConfig;
+import me.drownek.staffactivity.PluginConfig;
 import me.drownek.staffactivity.core.ActivityEntry;
 import me.drownek.staffactivity.core.ActivityPlayer;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
-import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;
 
@@ -17,31 +16,25 @@ public class ActivityPlayerService {
 
     private @Inject PluginConfig config;
     private @Inject ActivityPlayerRepository repository;
+    private @Inject ProxyServer proxyServer;
 
     public Optional<ActivityEntry> getUncompletedActivityEntry(ActivityPlayer activityPlayer) {
         return activityPlayer.getEntries().stream()
-                .filter(activityEntry -> activityEntry.getEndTime() == null)
-                .findFirst();
+            .filter(activityEntry -> activityEntry.getEndTime() == null)
+            .findFirst();
     }
 
     public void completeAllActiveEntries() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (player.hasPermission(config.staffPermission)) {
-                ActivityPlayer user = repository.getUser(player);
+        proxyServer.getAllPlayers().stream()
+            .filter(InboundConnection::isActive)
+            .filter(player -> player.hasPermission(config.staffPermission))
+            .map(player -> repository.getUser(player))
+            .forEach(user -> {
                 ActivityEntry uncompletedEntry = getUncompletedActivityEntry(user).orElse(null);
-
                 if (uncompletedEntry != null) {
                     uncompletedEntry.setEndTime(Instant.now());
                     user.save();
                 }
-            }
-        }
-    }
-
-    public Duration getPlayerTotalActivityTime(ActivityPlayer activityPlayer) {
-        return activityPlayer.getEntries().stream()
-                .filter(entry -> entry.getEndTime() != null)
-                .map(entry -> Duration.between(entry.getStartTime(), entry.getEndTime()))
-                .reduce(Duration.ZERO, Duration::plus);
+            });
     }
 }

@@ -66,4 +66,20 @@ public class PluginConfig extends OkaeriConfig {
 
     public DataItemStack viewGuiPlayerMoreMessageSent = new DataItemStack(Material.PAPER, "&7Message sent", List.of("&f{ACTION}"));
     public DataItemStack viewGuiPlayerMoreCommandSent = new DataItemStack(Material.MAP, "&7Command sent", List.of("&f{ACTION}"));
+
+    @Comment({"Whether to use proxy mode or not", "NOTE: When true, storageType must be set to MYSQL"})
+    public boolean proxyMode = false;
+
+    @Comment("Database configuration")
+    public StorageConfig storageConfig = new StorageConfig();
+
+    public static class StorageConfig extends OkaeriConfig {
+        @Comment("Available types: MYSQL, FLAT")
+        public StorageType storageType = StorageType.FLAT;
+
+        public String prefix = "StaffActivityMonitor";
+
+        @Comment("URI if mysql is enabled")
+        public String uri = "jdbc:mysql://localhost:3306/mydatabase?user=user123&password=<PASSWORD>";
+    }
 }

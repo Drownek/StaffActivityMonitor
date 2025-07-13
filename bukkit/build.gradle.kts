@@ -16,9 +16,15 @@ bukkit {
 }
 
 dependencies {
+    implementation(project(":core"))
+
     compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
 
-    implementation("com.github.Drownek:light-platform:2.0.1")
+    implementation("com.github.Drownek.light-platform:bukkit:2.0.2")
+
+    implementation("eu.okaeri:okaeri-configs-json-simple:5.0.9")
+    implementation("eu.okaeri:okaeri-persistence-jdbc:3.0.1-beta.3")
+    implementation("org.mariadb.jdbc:mariadb-java-client:2.7.3")
 
     /* lombok */
     val lombok = "1.18.32"
@@ -27,7 +33,7 @@ dependencies {
 }
 
 tasks.shadowJar {
-    archiveFileName.set("StaffActivityMonitor-${project.version}.jar")
+    archiveFileName.set("StaffActivityMonitor-Bukkit-${project.version}.jar")
 
     exclude(
         "org/intellij/lang/annotations/**",
@@ -53,6 +59,9 @@ tasks.shadowJar {
     /* Fail as it wont work on server versions with plugin remapping */
     duplicatesStrategy = DuplicatesStrategy.FAIL
 }
+
+val randomPort = false
+val port = 25566
 
 val runVersions = mapOf(
     "1.8.8" to 16,
@@ -84,7 +93,7 @@ tasks {
                 languageVersion.set(JavaLanguageVersion.of(value))
             })
 
-            /* Assign random port for multiple instances at the same time */
+            /* Assign random or specified port for multiple instances at the same time */
             doFirst {
                 val runDirFile = runDir.asFile
                 if (!runDirFile.exists()) {
@@ -100,13 +109,19 @@ tasks {
                     serverPropertiesFile.inputStream().use { load(it) }
                 }
 
-                val randomPort = (20000..40000).random()
-                props["server-port"] = randomPort.toString()
+                val port = if (randomPort) (20000..40000).random() else port
+                props["server-port"] = port.toString()
 
                 serverPropertiesFile.outputStream().use { props.store(it, null) }
 
-                println(">> Starting server $key on port $randomPort")
+                println(">> Starting server $key on port $port")
             }
         }
+    }
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(16))
     }
 }

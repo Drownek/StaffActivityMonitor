@@ -1,4 +1,4 @@
-package me.drownek.staffactivity.data.activity;
+package me.drownek.staffactivity.core;
 
 import eu.okaeri.persistence.document.Document;
 import lombok.Getter;

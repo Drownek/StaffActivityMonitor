@@ -9,7 +9,7 @@ import dev.rollczi.litecommands.suggestion.SuggestionResult;
 import eu.okaeri.injector.annotation.Inject;
 import me.drownek.platform.bukkit.annotation.CommandArgument;
 import me.drownek.staffactivity.config.Messages;
-import me.drownek.staffactivity.data.activity.ActivityPlayer;
+import me.drownek.staffactivity.core.ActivityPlayer;
 import me.drownek.staffactivity.data.activity.ActivityPlayerRepository;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;

@@ -16,6 +16,15 @@ import java.io.File;
 @Component
 public class PersistenceConfigurer {
 
+    /**
+     * Creates and configures a {@link DocumentPersistence} instance based on the storage type specified in the provided configuration.
+     *
+     * Depending on the storage type, this method returns either a MySQL-backed persistence layer using MariaDB and HikariCP, or a flat file YAML-based persistence layer using the given data folder.
+     *
+     * @param dataFolder the folder where flat file data will be stored if flat file persistence is selected
+     * @param config the plugin configuration containing storage settings
+     * @return a configured {@link DocumentPersistence} instance for the selected storage type
+     */
     @Bean("persistence")
     public DocumentPersistence configurePersistence(@Inject("dataFolder") File dataFolder, PluginConfig config) {
         return switch (config.storageConfig.storageType) {

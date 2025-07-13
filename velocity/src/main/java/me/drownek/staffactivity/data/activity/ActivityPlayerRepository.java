@@ -16,6 +16,12 @@ import java.util.UUID;
 @DocumentCollection(path = "users", keyLength = 36)
 public interface ActivityPlayerRepository extends DocumentRepository<UUID, ActivityPlayer> {
 
+    /**
+     * Retrieves the {@link ActivityPlayer} associated with the given player, creating a new record if one does not exist.
+     *
+     * @param player the player whose activity data is to be retrieved
+     * @return the {@link ActivityPlayer} corresponding to the player's UUID
+     */
     default ActivityPlayer getUser(Player player) {
         return findOrCreateByPath(player.getUniqueId());
     }

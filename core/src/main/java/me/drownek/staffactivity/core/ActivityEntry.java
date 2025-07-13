@@ -16,6 +16,11 @@ public class ActivityEntry extends Document {
     private Instant endTime;
     private Map<Long, Action> actions;
 
+    /**
+     * Creates a new ActivityEntry with the specified start time and an empty set of actions.
+     *
+     * @param startTime the time when the activity begins
+     */
     public ActivityEntry(Instant startTime) {
         this.startTime = startTime;
         actions = new HashMap<>();

@@ -17,11 +17,21 @@ import me.drownek.staffactivity.data.activity.ActivityPlayerService;
 @Scan(deep = true, exclusions = "me.drownek.staffactivity.libs")
 public final class StaffActivityPlugin extends LightVelocityPlugin {
 
+	/**
+	 * Executes post-startup logic after the plugin has been initialized.
+	 *
+	 * Logs a message indicating that the plugin has loaded successfully.
+	 */
 	@Planned(ExecutionPhase.POST_STARTUP)
 	void postStartup() {
 		log("Plugin loaded successfully!");
 	}
 
+	/**
+	 * Finalizes all ongoing staff activity tracking and performs cleanup during plugin shutdown.
+	 *
+	 * Calls {@code completeAllActiveEntries()} on the provided {@code ActivityPlayerService} to ensure all active staff activity entries are completed before the plugin is unloaded.
+	 */
 	@Planned(ExecutionPhase.SHUTDOWN)
 	void shutdown(
 		ActivityPlayerService activityPlayerService

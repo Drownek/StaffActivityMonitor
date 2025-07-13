@@ -60,6 +60,17 @@ public class ActivityViewGui {
         openActivityViewForPlayer(player, activityPlayer, closeAction, true);
     }
 
+    /**
+     * Opens a paginated GUI displaying detailed activity entries for a specific player.
+     *
+     * Each entry shows the session's start and end times, along with counts of executed commands and sent messages.
+     * Entries can be sorted from oldest to newest or vice versa. Selecting an entry opens a detailed view of its actions.
+     *
+     * @param player the player viewing the activity data
+     * @param activityPlayer the player whose activity entries are being displayed
+     * @param closeAction callback executed when the GUI is closed
+     * @param oldestToNewest if true, entries are shown from oldest to newest; otherwise, newest to oldest
+     */
     public void openActivityViewForPlayer(HumanEntity player, ActivityPlayer activityPlayer, Consumer<HumanEntity> closeAction, boolean oldestToNewest) {
         PaginatedGui gui = config.viewGuiPlayer
             .closeAction(closeAction)
@@ -102,6 +113,11 @@ public class ActivityViewGui {
         gui.open(player);
     }
 
+    /**
+     * Opens a paginated GUI displaying detailed actions (commands or messages) from a specific activity entry for a player.
+     *
+     * Each action is represented as a GUI item styled according to its type. Closing the GUI returns the user to the previous activity view with the same sorting order.
+     */
     private void openViewMoreGui(HumanEntity player, ActivityPlayer activityPlayer, Consumer<HumanEntity> closeAction, boolean oldestToNewest, Map<Long, Action> actions) {
         PaginatedGui viewMoreGui = config.viewGuiPlayerMore
             .closeAction(humanEntity ->

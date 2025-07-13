@@ -12,6 +12,14 @@ import me.drownek.staffactivity.PluginConfig;
 @Component
 public class PersistenceConfigurer {
 
+    /**
+     * Configures and provides a DocumentPersistence instance backed by MariaDB using settings from the given plugin configuration.
+     *
+     * The returned persistence uses a JSON simple configurer for document serialization and is initialized with a MariaDB connection pool and a persistence path derived from the configuration.
+     *
+     * @param config the plugin configuration containing storage settings
+     * @return a DocumentPersistence instance configured for MariaDB with JSON document support
+     */
     @Bean("persistence")
     public DocumentPersistence configurePersistence(PluginConfig config) {
         // @formatter:off

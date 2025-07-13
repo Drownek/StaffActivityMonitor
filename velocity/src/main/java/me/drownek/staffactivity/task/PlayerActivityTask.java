@@ -28,6 +28,10 @@ public class PlayerActivityTask implements Runnable {
     private @Inject PlatformScheduler scheduler;
     private @Inject ProxyServer proxy;
 
+    /**
+     * Periodically updates staff activity records by ensuring all online players with staff permission have an activity record,
+     * and processes all tracked players to start or end activity entries based on their current status and permissions.
+     */
     @Override
     public void run() {
         for (Player player : proxy.getAllPlayers()) {
@@ -41,6 +45,14 @@ public class PlayerActivityTask implements Runnable {
         }
     }
 
+    /**
+     * Processes an activity player by updating their activity entry based on their current online status and staff permission.
+     *
+     * If the player is online and has the required staff permission, starts a new activity entry if none is ongoing.
+     * If the player is offline or lacks the required permission, completes any ongoing activity entry.
+     *
+     * @param user the activity player to process
+     */
     private void processPlayer(ActivityPlayer user) {
         ActivityEntry uncompletedEntry = activityPlayerService.getUncompletedActivityEntry(user).orElse(null);
 
@@ -53,6 +65,14 @@ public class PlayerActivityTask implements Runnable {
         }
     }
 
+    /**
+     * Starts a new activity entry for the player if none is currently ongoing.
+     *
+     * If the player does not have an uncompleted activity entry, creates a new entry with the current timestamp and saves the user's activity data.
+     *
+     * @param user The activity player whose activity is being tracked.
+     * @param uncompletedEntry The player's current uncompleted activity entry, or null if none exists.
+     */
     private void handleOnlinePlayer(ActivityPlayer user, ActivityEntry uncompletedEntry) {
         if (uncompletedEntry == null) {
             user.getEntries().add(new ActivityEntry(Instant.now()));
@@ -60,6 +80,11 @@ public class PlayerActivityTask implements Runnable {
         }
     }
 
+    /**
+     * Completes the ongoing activity entry for a player who is offline or no longer has the required permission.
+     *
+     * If the player has an uncompleted activity entry, sets its end time to the current instant and saves the updated user data.
+     */
     private void handleOfflineOrUnauthorizedPlayer(ActivityPlayer user, ActivityEntry uncompletedEntry) {
         if (uncompletedEntry != null) {
             uncompletedEntry.setEndTime(Instant.now());

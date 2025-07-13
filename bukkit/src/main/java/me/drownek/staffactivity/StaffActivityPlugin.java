@@ -14,6 +14,11 @@ import org.bukkit.command.CommandSender;
 @Scan(deep = true, exclusions = "me.drownek.staffactivity.libs")
 public class StaffActivityPlugin extends LightBukkitPlugin {
 
+    /**
+     * Performs pre-startup checks for proxy mode and storage configuration.
+     *
+     * Logs a warning if proxy mode is enabled but the storage type is not set to MYSQL, indicating that the plugin will not update any data.
+     */
     @Planned(ExecutionPhase.PRE_STARTUP)
     void preStartup(
         PluginConfig config
@@ -23,6 +28,12 @@ public class StaffActivityPlugin extends LightBukkitPlugin {
         }
     }
 
+    /**
+     * Applies message-based command configurations and logs successful plugin startup.
+     *
+     * @param messages  the Messages instance containing command configurations
+     * @param commands  the LiteCommands instance to configure
+     */
     @Planned(ExecutionPhase.POST_STARTUP)
     void postStartup(
         Messages messages,

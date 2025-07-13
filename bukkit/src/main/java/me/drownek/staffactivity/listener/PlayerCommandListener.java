@@ -25,6 +25,12 @@ public class PlayerCommandListener implements Listener {
     private @Inject PlatformScheduler scheduler;
     private @Inject ActivityPlayerService activityPlayerService;
 
+    /**
+     * Handles player command events for staff members by recording their commands asynchronously.
+     *
+     * If the plugin is running in proxy mode or the player lacks staff permissions, the event is ignored.
+     * For eligible staff players, this method logs the executed command as an action in their uncompleted activity entry.
+     */
     @EventHandler(priority = EventPriority.MONITOR)
     void handle(PlayerCommandPreprocessEvent event) {
         if (config.proxyMode) {

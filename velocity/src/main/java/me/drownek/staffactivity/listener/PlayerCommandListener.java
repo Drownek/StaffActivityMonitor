@@ -24,6 +24,13 @@ public class PlayerCommandListener implements Listener {
     private @Inject PlatformScheduler scheduler;
     private @Inject ActivityPlayerService activityPlayerService;
 
+    /**
+     * Handles command execution events by staff players and records the command as an action in their current activity entry.
+     *
+     * Processes only commands executed by players with the required staff permission. If the player has an uncompleted activity entry, the executed command is logged as a `COMMAND` action with a timestamp. The update is performed asynchronously.
+     *
+     * @param event the command execution event to handle
+     */
     @Subscribe
     void handle(CommandExecuteEvent event) {
         if (!(event.getCommandSource() instanceof Player player)) {

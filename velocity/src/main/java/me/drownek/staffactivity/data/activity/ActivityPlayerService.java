@@ -18,12 +18,26 @@ public class ActivityPlayerService {
     private @Inject ActivityPlayerRepository repository;
     private @Inject ProxyServer proxyServer;
 
+    /**
+     * Retrieves the first uncompleted activity entry for the specified player.
+     *
+     * An uncompleted activity entry is one where the end time is not set.
+     *
+     * @param activityPlayer the player whose activity entries are to be checked
+     * @return an {@code Optional} containing the first uncompleted {@code ActivityEntry}, or empty if none exist
+     */
     public Optional<ActivityEntry> getUncompletedActivityEntry(ActivityPlayer activityPlayer) {
         return activityPlayer.getEntries().stream()
             .filter(activityEntry -> activityEntry.getEndTime() == null)
             .findFirst();
     }
 
+    /**
+     * Completes all active (uncompleted) activity entries for currently connected staff players.
+     *
+     * Iterates over all connected players with the required staff permission, finds any of their ongoing activity entries,
+     * sets the end time to the current instant, and saves the updated player data.
+     */
     public void completeAllActiveEntries() {
         proxyServer.getAllPlayers().stream()
             .filter(InboundConnection::isActive)

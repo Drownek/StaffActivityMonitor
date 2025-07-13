@@ -25,6 +25,13 @@ public class PlayerChatListener implements Listener {
     private @Inject ActivityPlayerRepository repository;
     private @Inject PlatformScheduler scheduler;
 
+    /**
+     * Handles asynchronous player chat events to record staff chat messages as activity actions.
+     *
+     * If the plugin is not in proxy mode and the player has the required staff permission, schedules an asynchronous task to log the chat message as an action for the player's current uncompleted activity entry.
+     *
+     * @param event the asynchronous player chat event
+     */
     @EventHandler(priority = EventPriority.MONITOR)
     void handle(AsyncPlayerChatEvent event) {
         if (config.proxyMode) {

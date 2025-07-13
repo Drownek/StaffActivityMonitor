@@ -27,6 +27,10 @@ public class PlayerActivityTask implements Runnable {
     private @Inject PluginConfig config;
     private @Inject PlatformScheduler scheduler;
 
+    /**
+     * Executes the scheduled task to process activity tracking for all offline players,
+     * unless the plugin is running in proxy mode.
+     */
     @Override
     public void run() {
         if (config.proxyMode) {

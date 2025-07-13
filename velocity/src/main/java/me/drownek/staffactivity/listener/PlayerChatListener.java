@@ -24,6 +24,14 @@ public class PlayerChatListener implements Listener {
     private @Inject ActivityPlayerRepository repository;
     private @Inject PlatformScheduler scheduler;
 
+    /**
+     * Handles player chat events by recording staff chat messages as actions for activity tracking.
+     *
+     * If the player has the required staff permission, schedules an asynchronous task to log the chat message
+     * as a `MESSAGE` action in the player's current uncompleted activity entry.
+     *
+     * @param event the player chat event containing the player and message information
+     */
     @Subscribe
     void handle(PlayerChatEvent event) {
         Player player = event.getPlayer();

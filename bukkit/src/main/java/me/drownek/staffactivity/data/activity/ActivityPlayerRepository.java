@@ -16,6 +16,12 @@ import java.util.UUID;
 @DocumentCollection(path = "users", keyLength = 36)
 public interface ActivityPlayerRepository extends DocumentRepository<UUID, ActivityPlayer> {
 
+    /**
+     * Retrieves the {@code ActivityPlayer} associated with the given {@code OfflinePlayer}, creating a new record if one does not exist.
+     *
+     * @param player the offline player whose activity data is to be retrieved
+     * @return the corresponding {@code ActivityPlayer} instance
+     */
     default ActivityPlayer getUser(OfflinePlayer player) {
         return findOrCreateByPath(player.getUniqueId());
     }

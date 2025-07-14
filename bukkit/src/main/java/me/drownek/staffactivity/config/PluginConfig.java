@@ -64,8 +64,8 @@ public class PluginConfig extends OkaeriConfig {
         .title("Last user activity")
         .build();
 
-    public DataItemStack viewGuiPlayerMoreMessageSent = new DataItemStack(Material.PAPER, "&7Message sent", List.of("&f{ACTION}"));
-    public DataItemStack viewGuiPlayerMoreCommandSent = new DataItemStack(Material.MAP, "&7Command sent", List.of("&f{ACTION}"));
+    public DataItemStack viewGuiPlayerMoreMessageSent = new DataItemStack(Material.PAPER, "&7Message sent", List.of("&7Time: &f{TIME}", "&f{ACTION}"));
+    public DataItemStack viewGuiPlayerMoreCommandSent = new DataItemStack(Material.MAP, "&7Command sent", List.of("&7Time: &f{TIME}", "&f{ACTION}"));
 
     @Comment({"Whether to use proxy mode or not", "NOTE: When true, storageType must be set to MYSQL"})
     public boolean proxyMode = false;

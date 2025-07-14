@@ -49,9 +49,6 @@ public class PlayerCommandListener implements Listener {
             String command = event.getCommand().startsWith("/") ? event.getCommand() : "/" + event.getCommand();
             activityEntry.getActions().put(Instant.now().toEpochMilli(), new Action(Instant.now(), ActionType.COMMAND, command));
             user.save();
-
-            System.out.println("Added command and saved, latest size commands: " + activityEntry.getActions().size());
-            System.out.println(user.getUuid());
-        });;
+        });
     }
 }

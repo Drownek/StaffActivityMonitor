@@ -61,6 +61,9 @@ public class ActivityViewGui {
     }
 
     public void openActivityViewForPlayer(HumanEntity player, ActivityPlayer activityPlayer, Consumer<HumanEntity> closeAction, boolean oldestToNewest) {
+        System.out.println("ActivityViewGui.openActivityViewForPlayer");
+        System.out.println(activityPlayer.getUuid());
+
         PaginatedGui gui = config.viewGuiPlayer
             .closeAction(closeAction)
             .toPaginatedGuiBuilder()
@@ -74,6 +77,7 @@ public class ActivityViewGui {
             var endTime = endTimestamp == null ? "now" : TimeUtil.formatTimeMillisToDate(endTimestamp.toEpochMilli());
 
             Map<Long, Action> actions = activityEntry.getActions();
+            System.out.println("actions.size() = " + actions.size());
             long commandCount = actions.values().stream()
                 .filter(action -> action.getType().equals(ActionType.COMMAND))
                 .count();
@@ -116,6 +120,7 @@ public class ActivityViewGui {
             viewMoreGui.addItem(
                 (isCommand ? config.viewGuiPlayerMoreCommandSent : config.viewGuiPlayerMoreMessageSent)
                     .with("{ACTION}", action.getMessage())
+                    .with("{TIME}", TimeUtil.formatTimeMillisToDate(action.getTime().toEpochMilli()))
                     .asGuiItem()
             );
         }

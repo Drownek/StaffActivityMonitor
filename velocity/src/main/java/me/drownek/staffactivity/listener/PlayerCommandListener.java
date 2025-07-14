@@ -8,6 +8,7 @@ import eu.okaeri.platform.velocity.component.type.listener.Listener;
 import eu.okaeri.platform.velocity.scheduler.PlatformScheduler;
 import me.drownek.platform.core.annotation.Component;
 import me.drownek.staffactivity.PluginConfig;
+import me.drownek.staffactivity.core.ActivityEntry;
 import me.drownek.staffactivity.core.ActivityPlayer;
 import me.drownek.staffactivity.core.action.Action;
 import me.drownek.staffactivity.core.action.ActionType;
@@ -36,11 +37,21 @@ public class PlayerCommandListener implements Listener {
 
         scheduler.runAsync(() -> {
             ActivityPlayer user = repository.getUser(player);
-            activityPlayerService.getUncompletedActivityEntry(user).ifPresent(activityEntry -> {
-                String command = event.getCommand().startsWith("/") ? event.getCommand() : "/" + event.getCommand();
-                activityEntry.getActions().put(Instant.now().toEpochMilli(), new Action(ActionType.COMMAND, command));
-                user.save();
-            });
-        });
+
+            // Create new entry in case it hadn't been created yet
+            ActivityEntry activityEntry = activityPlayerService.getUncompletedActivityEntry(user)
+                .orElseGet(() -> {
+                    ActivityEntry newEntry = new ActivityEntry(Instant.now());
+                    user.getEntries().add(newEntry);
+                    return newEntry;
+                });
+
+            String command = event.getCommand().startsWith("/") ? event.getCommand() : "/" + event.getCommand();
+            activityEntry.getActions().put(Instant.now().toEpochMilli(), new Action(Instant.now(), ActionType.COMMAND, command));
+            user.save();
+
+            System.out.println("Added command and saved, latest size commands: " + activityEntry.getActions().size());
+            System.out.println(user.getUuid());
+        });;
     }
 }

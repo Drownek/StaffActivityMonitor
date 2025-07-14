@@ -37,7 +37,8 @@ public class PlayerCommandListener implements Listener {
         scheduler.runAsync(() -> {
             ActivityPlayer user = repository.getUser(player);
             activityPlayerService.getUncompletedActivityEntry(user).ifPresent(activityEntry -> {
-                activityEntry.getActions().put(Instant.now().toEpochMilli(), new Action(ActionType.COMMAND, event.getCommand()));
+                String command = event.getCommand().startsWith("/") ? event.getCommand() : "/" + event.getCommand();
+                activityEntry.getActions().put(Instant.now().toEpochMilli(), new Action(ActionType.COMMAND, command));
                 user.save();
             });
         });

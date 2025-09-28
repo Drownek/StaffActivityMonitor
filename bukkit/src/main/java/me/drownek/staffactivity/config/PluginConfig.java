@@ -71,15 +71,23 @@ public class PluginConfig extends OkaeriConfig {
     public boolean proxyMode = false;
 
     @Comment("Database configuration")
-    public StorageConfig storageConfig = new StorageConfig();
+    public StorageConfig storage = new StorageConfig();
 
     public static class StorageConfig extends OkaeriConfig {
-        @Comment("Available types: MYSQL, FLAT")
-        public StorageType storageType = StorageType.FLAT;
 
+        @Comment("Type of the storage backend: FLAT, MYSQL, POSTGRES")
+        public StorageType backend = StorageType.FLAT;
+
+        @Comment("Prefix for the storage")
         public String prefix = "StaffActivityMonitor";
 
-        @Comment("URI if mysql is enabled")
-        public String uri = "jdbc:mysql://localhost:3306/mydatabase?user=user123&password=<PASSWORD>";
+        @Comment("FLAT  : not needed")
+        @Comment("MYSQL  : jdbc:mysql://localhost:3306/db")
+        @Comment("POSTGRES  : jdbc:postgresql://localhost:5432/db")
+        public String uri = "jdbc:mysql://localhost:3306/db";
+
+        public String user = "";
+
+        public String password = "";
     }
 }

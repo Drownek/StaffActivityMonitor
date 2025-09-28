@@ -14,7 +14,8 @@ dependencyResolutionManagement {
         maven("https://storehouse.okaeri.eu/repository/maven-public/")
         maven("https://repo.panda-lang.org/releases")
         maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+        maven("https://oss.sonatype.org/content/repositories/snapshots")
     }
 }
 
-include("bukkit", "velocity", "core")
+include("bukkit", "velocity", "bungee", "core")

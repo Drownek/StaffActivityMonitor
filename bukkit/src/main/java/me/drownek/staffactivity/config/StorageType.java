@@ -1,5 +1,5 @@
 package me.drownek.staffactivity.config;
 
 public enum StorageType {
-    MYSQL, FLAT
+    FLAT, MYSQL, POSTGRES
 }

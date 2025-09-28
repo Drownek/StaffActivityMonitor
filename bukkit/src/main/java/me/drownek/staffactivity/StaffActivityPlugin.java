@@ -9,7 +9,10 @@ import me.drownek.staffactivity.config.Messages;
 import me.drownek.staffactivity.config.PluginConfig;
 import me.drownek.staffactivity.config.StorageType;
 import me.drownek.staffactivity.data.activity.ActivityPlayerService;
+import me.drownek.util.localization.LocalizationManager;
 import org.bukkit.command.CommandSender;
+
+import java.util.Locale;
 
 @Scan(deep = true, exclusions = "me.drownek.staffactivity.libs")
 public class StaffActivityPlugin extends LightBukkitPlugin {
@@ -18,7 +21,8 @@ public class StaffActivityPlugin extends LightBukkitPlugin {
     void preStartup(
         PluginConfig config
     ) {
-        if (config.proxyMode && !config.storageConfig.storageType.equals(StorageType.MYSQL)) {
+        LocalizationManager.setDefaultLocale(Locale.ENGLISH);
+        if (config.proxyMode && !config.storage.backend.equals(StorageType.MYSQL)) {
             getLogger().warning("Proxy mode is enabled, but storage type is not set to MYSQL, plugin won't update any data!");
         }
     }

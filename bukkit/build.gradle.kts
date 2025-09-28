@@ -20,11 +20,7 @@ dependencies {
 
     compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
 
-    implementation("com.github.Drownek.light-platform:bukkit:2.0.2")
-
-    implementation("eu.okaeri:okaeri-configs-json-simple:5.0.9")
-    implementation("eu.okaeri:okaeri-persistence-jdbc:3.0.1-beta.3")
-    implementation("org.mariadb.jdbc:mariadb-java-client:2.7.3")
+    implementation("com.github.Drownek.light-platform:light-platform-bukkit:2.2.1")
 
     /* lombok */
     val lombok = "1.18.32"
@@ -64,8 +60,7 @@ val randomPort = false
 val port = 25566
 
 val runVersions = mapOf(
-    "1.8.8" to 16,
-    "1.16.5" to 16,
+    "1.17.1" to 17,
     "1.18.2" to 17,
     "1.19.4" to 19,
     "1.20.6" to 21,
@@ -81,7 +76,7 @@ tasks {
             minecraftVersion(key)
 
             /* Automatically accept EULA */
-            jvmArgs("-Dcom.mojang.eula.agree=true")
+            jvmArgs("-Dcom.mojang.eula.agree=true", "-DPaper.IgnoreJavaVersion=true")
 
             val runDir = layout.projectDirectory.dir("run$n")
             runDirectory.set(runDir)
@@ -122,6 +117,6 @@ tasks {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(16))
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }

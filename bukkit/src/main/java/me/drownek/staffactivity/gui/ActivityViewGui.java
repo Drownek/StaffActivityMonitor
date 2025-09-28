@@ -17,13 +17,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
-import panda.std.collection.ReversedIterable;
 
 import java.time.Instant;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Consumer;
 
 @Component
@@ -67,7 +63,9 @@ public class ActivityViewGui {
             .disableAllInteractions()
             .create();
 
-        var entries = oldestToNewest ? activityPlayer.getEntries() : new ReversedIterable<>(activityPlayer.getEntries());
+        var entries = new ArrayList<>(activityPlayer.getEntries());
+        if (!oldestToNewest) Collections.reverse(entries);
+
         for (ActivityEntry activityEntry : entries) {
             var startTime = TimeUtil.formatTimeMillisToDate(activityEntry.getStartTime().toEpochMilli());
             Instant endTimestamp = activityEntry.getEndTime();

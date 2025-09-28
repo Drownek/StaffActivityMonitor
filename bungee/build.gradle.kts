@@ -1,15 +1,15 @@
 plugins {
     id("com.gradleup.shadow") version "9.0.0-beta12"
-    id("xyz.jpenilla.run-velocity") version "2.3.1"
+    id("xyz.jpenilla.run-waterfall") version "2.3.1"
+    id("de.eldoria.plugin-yml.bungee") version "0.8.0"
 }
 
 dependencies {
     implementation(project(":core"))
 
-    compileOnly("com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
-    annotationProcessor("com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
+    compileOnly("net.md-5:bungeecord-api:1.21-R0.3")
 
-    implementation("com.github.Drownek.light-platform:light-platform-velocity:2.2.1")
+    implementation("com.github.Drownek.light-platform:light-platform-bungee:2.2.1")
 
     /* lombok */
     val lombok = "1.18.32"
@@ -17,8 +17,14 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:$lombok")
 }
 
+bungee {
+    main = "me.drownek.staffactivity.StaffActivityPlugin"
+    name = "StaffActivityMonitor"
+    author = "Drownek"
+}
+
 tasks.shadowJar {
-    archiveFileName.set("StaffActivityMonitor-Velocity-${project.version}.jar")
+    archiveFileName.set("StaffActivityMonitor-Bungee-${project.version}.jar")
 
     exclude(
         "org/intellij/lang/annotations/**",
@@ -42,8 +48,8 @@ tasks.shadowJar {
 }
 
 tasks {
-    runVelocity {
-        velocityVersion("3.3.0-SNAPSHOT")
+    runWaterfall {
+        waterfallVersion("1.21")
     }
 }
 

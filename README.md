@@ -23,10 +23,10 @@ That includes messages/commands sent and times at which the player was online.
 
 `staffactivity.commands` - Required permission to use all plugin commands
 
-## Installation for proxy servers (Currently only Velocity)
+## Installation for proxy servers
 * Install a Bukkit version on all non-proxy servers you wish to see staff data
-  * enable proxyMode in config, and set up the database as MYSQL
-* Install a Velocity version on a proxy server
+  * enable proxyMode in config of each bukkit subservers, and set up the database as MYSQL or Postgres
+* Install a Bungeecord/Velocity version on a proxy server
   * configure it to use the same database as non-proxy servers
 * Now, proxy server will track staff data, and non-proxy servers will be able to show it through gui
 
@@ -38,17 +38,15 @@ That includes messages/commands sent and times at which the player was online.
 - [TriumphGui](https://github.com/TriumphTeam/triumph-gui)
 
 ## Supported versions
-All servers must run under Java 16+ in order for the plugin to work.
+All servers must run under Java 17+ in order for the plugin to work.
 
 Plugin was tested under the following versions:
-- 1.8
-- 1.11.2
-- 1.12.2
-- 1.16.5
+- 1.17.1
 - 1.18.2
 - 1.19.4
 - 1.20.1
 - 1.21.5
+- 1.21.8
 
 If you have some issues, feel free to reach me on discord: `drownek` or create an issue in GitHub repository!
 

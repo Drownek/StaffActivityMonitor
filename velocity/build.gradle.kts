@@ -11,6 +11,8 @@ dependencies {
 
     implementation("com.github.Drownek.light-platform:light-platform-velocity:2.2.1")
 
+    implementation("org.bstats:bstats-velocity:3.0.2")
+
     /* lombok */
     val lombok = "1.18.32"
     compileOnly("org.projectlombok:lombok:$lombok")
@@ -36,6 +38,7 @@ tasks.shadowJar {
         "panda",
         "net.jodah",
         "me.drownek.util",
+        "org.bstats"
     ).forEach { pack ->
         relocate(pack, "$prefix.$pack")
     }

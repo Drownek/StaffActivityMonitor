@@ -10,6 +10,7 @@ import me.drownek.staffactivity.config.PluginConfig;
 import me.drownek.staffactivity.config.StorageType;
 import me.drownek.staffactivity.data.activity.ActivityPlayerService;
 import me.drownek.util.localization.LocalizationManager;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.command.CommandSender;
 
 import java.util.Locale;
@@ -33,6 +34,7 @@ public class StaffActivityPlugin extends LightBukkitPlugin {
         LiteCommands<CommandSender> commands
     ) {
         messages.liteCommandsConfig.apply(commands);
+        new Metrics(this, 27396);
         log("Plugin loaded successfully!");
     }
 

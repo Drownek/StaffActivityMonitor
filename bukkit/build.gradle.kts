@@ -22,6 +22,8 @@ dependencies {
 
     implementation("com.github.Drownek.light-platform:light-platform-bukkit:2.2.1")
 
+    implementation("org.bstats:bstats-bukkit:3.0.2")
+
     /* lombok */
     val lombok = "1.18.32"
     compileOnly("org.projectlombok:lombok:$lombok")
@@ -48,6 +50,7 @@ tasks.shadowJar {
         "net.jodah",
         "net.kyori",
         "me.drownek.util",
+        "org.bstats",
     ).forEach { pack ->
         relocate(pack, "$prefix.$pack")
     }

@@ -1,7 +1,10 @@
 # StaffActivityMonitor
-[![Modrinth](https://img.shields.io/badge/Available_on-Modrinth-light_green)](https://modrinth.com/plugin/staffactivitymonitor/) [![SpigotMC](https://img.shields.io/badge/Available_on-SpigotMC-orange)](https://www.spigotmc.org/resources/staffactivitymonitor.126807/)
 
 A simple, efficient, and highly customizable Bukkit plugin for tracking staff activity.
+
+[![Modrinth](https://img.shields.io/badge/Available_on-Modrinth-light_green)](https://modrinth.com/plugin/staffactivitymonitor/) [![SpigotMC](https://img.shields.io/badge/Available_on-SpigotMC-orange)](https://www.spigotmc.org/resources/staffactivitymonitor.126807/)
+
+![](https://i.imgur.com/VtW3F26.png)
 
 ## Usage
 All players with permission `staffactivity.staff` are tracked by the plugin.
@@ -15,7 +18,7 @@ That includes messages/commands sent and times at which the player was online.
 
 `/staffactivity view <player>` - Opens the activity view for a specific player
 
-`/staffactivity reload` - Reloads the plugin configuration files  
+`/staffactivity reload` - Reloads the plugin configuration files
 
 ## Permissions
 

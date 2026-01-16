@@ -18,11 +18,15 @@ import java.util.Locale;
 @Scan(deep = true, exclusions = "me.drownek.staffactivity.libs")
 public class StaffActivityPlugin extends LightBukkitPlugin {
 
+    @Planned(ExecutionPhase.PRE_SETUP)
+    void preSetup() {
+        LocalizationManager.setDefaultLocale(Locale.ENGLISH);
+    }
+
     @Planned(ExecutionPhase.PRE_STARTUP)
     void preStartup(
         PluginConfig config
     ) {
-        LocalizationManager.setDefaultLocale(Locale.ENGLISH);
         if (config.proxyMode && !config.storage.backend.equals(StorageType.MYSQL)) {
             getLogger().warning("Proxy mode is enabled, but storage type is not set to MYSQL, plugin won't update any data!");
         }

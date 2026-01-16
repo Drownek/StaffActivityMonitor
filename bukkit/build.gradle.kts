@@ -20,7 +20,7 @@ dependencies {
 
     compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
 
-    implementation("com.github.Drownek.light-platform:light-platform-bukkit:2.2.1")
+    implementation("com.github.Drownek:platform-bukkit:2.3.0-beta2")
 
     implementation("org.bstats:bstats-bukkit:3.0.2")
 

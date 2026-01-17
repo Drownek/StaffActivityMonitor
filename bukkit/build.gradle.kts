@@ -20,7 +20,7 @@ dependencies {
 
     compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
 
-    implementation("com.github.Drownek:platform-bukkit:2.3.0-beta2")
+    implementation("io.github.drownek:platform-bukkit:2.3.2-SNAPSHOT")
 
     implementation("org.bstats:bstats-bukkit:3.0.2")
 
@@ -33,12 +33,7 @@ dependencies {
 tasks.shadowJar {
     archiveFileName.set("StaffActivityMonitor-Bukkit-${project.version}.jar")
 
-    exclude(
-        "org/intellij/lang/annotations/**",
-        "org/jetbrains/annotations/**",
-        "META-INF/**",
-        "javax/**"
-    )
+    mergeServiceFiles()
 
     val prefix = "me.drownek.staffactivity.libs"
     listOf(
@@ -54,9 +49,6 @@ tasks.shadowJar {
     ).forEach { pack ->
         relocate(pack, "$prefix.$pack")
     }
-
-    /* Fail as it wont work on server versions with plugin remapping */
-    duplicatesStrategy = DuplicatesStrategy.FAIL
 }
 
 val randomPort = false

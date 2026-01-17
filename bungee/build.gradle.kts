@@ -9,7 +9,7 @@ dependencies {
 
     compileOnly("net.md-5:bungeecord-api:1.21-R0.3")
 
-    implementation("com.github.Drownek:platform-bungee:2.3.0-beta2")
+    implementation("io.github.drownek:platform-bungee:2.3.2-SNAPSHOT")
 
     implementation("org.bstats:bstats-bungeecord:3.0.2")
 

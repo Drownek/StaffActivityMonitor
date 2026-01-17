@@ -9,7 +9,7 @@ dependencies {
     compileOnly("com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
     annotationProcessor("com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
 
-    implementation("com.github.Drownek:platform-velocity:2.3.0-beta2")
+    implementation("io.github.drownek:platform-velocity:2.3.2-SNAPSHOT")
 
     implementation("org.bstats:bstats-velocity:3.0.2")
 

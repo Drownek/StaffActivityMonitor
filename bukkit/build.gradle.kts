@@ -49,19 +49,22 @@ tasks.shadowJar {
     ).forEach { pack ->
         relocate(pack, "$prefix.$pack")
     }
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 val randomPort = false
 val port = 25566
 
 val runVersions = mapOf(
+    "1.8.8" to 17,
+    "1.12.2" to 17,
+    "1.13.2" to 17,
+    "1.16.5" to 17,
     "1.17.1" to 17,
     "1.18.2" to 17,
     "1.19.4" to 19,
-    "1.20.6" to 21,
-    "1.21.5" to 21,
-    "1.21.6" to 21,
-    "1.21.7" to 21,
+    "1.21.11" to 21
 )
 
 tasks {

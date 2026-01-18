@@ -8,6 +8,12 @@ dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         mavenCentral()
+        // Maven Central Snapshots - prioritized before PaperMC proxy to get latest snapshots
+        maven("https://central.sonatype.com/repository/maven-snapshots/") {
+            mavenContent {
+                snapshotsOnly()
+            }
+        }
         mavenLocal()
         maven("https://jitpack.io")
         maven("https://repo.papermc.io/repository/maven-public/")

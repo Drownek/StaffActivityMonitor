@@ -26,13 +26,27 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew build --no-daemon --stacktrace
+        id: gradle_build
+        run: |
+          ./gradlew build --no-daemon --stacktrace 2>&1 | tee build_output.log
+          echo "build_exit_code=${PIPESTATUS[0]}" >> $GITHUB_OUTPUT
 
       - name: Check for build errors
-        if: failure()
         run: |
-          echo "::error::Build failed! Check the logs above for details."
-          exit 1
+          if [ "${{ steps.gradle_build.outputs.build_exit_code }}" != "0" ]; then
+            echo "::error::Build failed with exit code ${{ steps.gradle_build.outputs.build_exit_code }}"
+            echo "=== Build Errors ==="
+            tail -n 100 build_output.log
+            echo "===================="
+            exit 1
+          fi
+
+          if grep -qi "BUILD FAILED" build_output.log; then
+            echo "::error::Build failed!"
+            exit 1
+          fi
+
+          echo "✓ Build completed successfully"
 
   test-minecraft-versions:
     name: Test Minecraft Versions
@@ -70,17 +84,17 @@ jobs:
 
       - name: Run ${{ matrix.minecraft-task }}
         id: run_server
-        timeout-minutes: 5
+        timeout-minutes: 2
         continue-on-error: true
         run: |
           echo "Running task: ${{ matrix.minecraft-task }}"
-          
-          # Run the gradle task and capture output
-          ./gradlew ${{ matrix.minecraft-task }} --no-daemon 2>&1 | tee server_output.log
-          
+
+          # Run the gradle task and capture output, stop after "Done" message
+          timeout 90s ./gradlew ${{ matrix.minecraft-task }} --no-daemon 2>&1 | tee server_output.log || true
+
           # Check if server started successfully (look for "Done" message)
           if grep -q "Done" server_output.log; then
-            echo "✓ Server started successfully"
+            echo "✓ Server reached 'Done' message"
             echo "server_started=true" >> $GITHUB_OUTPUT
           else
             echo "✗ Server failed to start - 'Done' message not found"
@@ -90,29 +104,48 @@ jobs:
       - name: Check for plugin errors
         if: steps.run_server.outputs.server_started == 'true'
         run: |
-          echo "Checking for stack traces from StaffActivityMonitor plugin..."
-          
-          # Get plugin name from project (adjust if needed)
+          echo "Checking for errors from StaffActivityMonitor plugin..."
+
           PLUGIN_NAME="StaffActivityMonitor"
-          
-          # Check for stack traces mentioning our plugin
-          if grep -i "exception\|error" server_output.log | grep -i "$PLUGIN_NAME"; then
-            echo "::error::Found stack traces related to $PLUGIN_NAME plugin!"
+
+          # Check for plugin enabling errors
+          if grep -q "Error occurred while enabling $PLUGIN_NAME" server_output.log; then
+            echo "::error::Plugin failed to enable!"
             echo "=== Error Details ==="
-            grep -i "exception\|error" server_output.log | grep -i "$PLUGIN_NAME" || true
+            grep -A 5 "Error occurred while enabling $PLUGIN_NAME" server_output.log
             echo "===================="
+            exit 1
+          fi
+
+          # Check for any stack traces that include our plugin package
+          if grep -E "(Exception|Error):" server_output.log | grep -E "(me\.drownek\.|$PLUGIN_NAME)" > /dev/null; then
+            echo "::error::Found exceptions/errors related to $PLUGIN_NAME plugin!"
+            echo "=== Stack Trace ==="
+            # Print the exception and following lines
+            grep -B 2 -A 20 -E "(Exception|Error):" server_output.log | grep -B 2 -A 20 -E "(me\.drownek\.|$PLUGIN_NAME)"
+            echo "===================="
+            exit 1
+          fi
+
+          # Check for ERROR level logs from our plugin
+          if grep -E "\[.*ERROR.*\].*$PLUGIN_NAME" server_output.log > /dev/null; then
+            echo "::error::Found ERROR level logs from $PLUGIN_NAME!"
+            echo "=== ERROR Logs ==="
+            grep -E "\[.*ERROR.*\].*$PLUGIN_NAME" server_output.log
+            echo "===================="
+            exit 1
+          fi
+
+          # Check if plugin actually enabled successfully
+          if ! grep -q "\[$PLUGIN_NAME\] Enabling $PLUGIN_NAME" server_output.log; then
+            echo "::warning::Plugin did not attempt to enable"
+          elif ! grep -q "Done" server_output.log; then
+            echo "::error::Server did not complete startup"
             exit 1
           else
             echo "✓ No plugin-related errors found in logs"
           fi
-          
-          # Additional check for any ERROR level logs from our plugin
-          if grep -E "\[.*ERROR.*\].*$PLUGIN_NAME" server_output.log; then
-            echo "::error::Found ERROR level logs from $PLUGIN_NAME!"
-            grep -E "\[.*ERROR.*\].*$PLUGIN_NAME" server_output.log
-            exit 1
-          fi
-          
+
           echo "✓ All checks passed for ${{ matrix.minecraft-task }}"
 
       - name: Check if server failed to start
@@ -131,9 +164,11 @@ jobs:
           name: server-logs-${{ matrix.minecraft-task }}
           path: |
             server_output.log
+            build_output.log
             logs/
             *.log
           retention-days: 7
+          if-no-files-found: ignore
 
   summary:
     name: Test Summary

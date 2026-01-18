@@ -74,7 +74,7 @@ tasks {
             minecraftVersion(key)
 
             /* Automatically accept EULA */
-            jvmArgs("-Dcom.mojang.eula.agree=true", "-DPaper.IgnoreJavaVersion=true")
+            jvmArgs("-Dcom.mojang.eula.agree=true")
 
             val runDir = layout.projectDirectory.dir("run$n")
             runDirectory.set(runDir)

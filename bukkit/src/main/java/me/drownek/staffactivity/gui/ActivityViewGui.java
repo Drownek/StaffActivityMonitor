@@ -53,7 +53,7 @@ public class ActivityViewGui {
     }
 
     public void openActivityViewForPlayer(HumanEntity player, ActivityPlayer activityPlayer, Consumer<HumanEntity> closeAction) {
-        openActivityViewForPlayer(player, activityPlayer, closeAction, true);
+        openActivityViewForPlayer(player, activityPlayer, closeAction, false);
     }
 
     public void openActivityViewForPlayer(HumanEntity player, ActivityPlayer activityPlayer, Consumer<HumanEntity> closeAction, boolean oldestToNewest) {

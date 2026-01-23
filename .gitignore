@@ -39,3 +39,5 @@ bin/
 .DS_Store
 
 **/run*/
+/bukkit/src/test/e2e/dist/
+/bukkit/src/test/e2e/node_modules/

@@ -52,7 +52,7 @@ public class PluginConfig extends OkaeriConfig {
 
     @Comment("Viewing contents of commands/messages after clicking view more in player list item")
     public PaginatedGuiSettings viewGuiPlayerMore = PaginatedGuiSettings.builder()
-        .title("Last user activity")
+        .title("User activity details")
         .build();
 
     public DataItemStack viewGuiPlayerMoreMessageSent = new DataItemStack(Material.PAPER, "&7Message sent", List.of("&7Time: &f{TIME}", "&f{ACTION}"));

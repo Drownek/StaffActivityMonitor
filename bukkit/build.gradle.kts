@@ -114,6 +114,10 @@ tasks {
         register("run$n", RunServer::class) {
             minecraftVersion(key)
 
+            downloadPlugins {
+                url("https://hangarcdn.papermc.io/plugins/HelpChat/PlaceholderAPI/versions/2.11.6/PAPER/PlaceholderAPI-2.11.6.jar")
+            }
+
             /* Automatically accept EULA */
             jvmArgs("-Dcom.mojang.eula.agree=true")
 

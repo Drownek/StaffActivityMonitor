@@ -88,8 +88,23 @@ public class PluginConfig extends OkaeriConfig {
     @Comment({"Whether to use proxy mode or not", "NOTE: When true, storageType must be set to MYSQL"})
     public boolean proxyMode = false;
 
+    @Comment("PlaceholderAPI configuration")
+    public PlaceholderConfig placeholders = new PlaceholderConfig();
+
     @Comment("Database configuration")
     public StorageConfig storage = new StorageConfig();
+
+    public static class PlaceholderConfig extends OkaeriConfig {
+
+        @Comment("Time format for placeholders: {days}d {hours}h {minutes}m")
+        public String timeFormat = "{days}d {hours}h {minutes}m";
+
+        @Comment("Date format for last_seen placeholder (Java DateTimeFormatter pattern)")
+        public String lastSeenFormat = "yyyy-MM-dd HH:mm:ss";
+
+        @Comment("Value to display when player is not tracked by staff activity")
+        public String notTrackedValue = "N/A";
+    }
 
     public static class StorageConfig extends OkaeriConfig {
 

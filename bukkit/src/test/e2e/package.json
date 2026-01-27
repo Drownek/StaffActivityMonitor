@@ -5,7 +5,7 @@
     "test": "tsc && paper-e2e-runner"
   },
   "dependencies": {
-    "@drownek/paper-e2e-runner": "^1.0.1"
+    "@drownek/paper-e2e-runner": "^1.0.2"
   },
   "devDependencies": {
     "typescript": "^5.7.3",

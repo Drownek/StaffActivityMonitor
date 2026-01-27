@@ -5,7 +5,7 @@ plugins {
     id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
     id("com.gradleup.shadow") version "9.0.0-beta12"
     id("xyz.jpenilla.run-paper") version "2.3.1"
-    id("me.drownek.paper-e2e") version "1.0.2"
+    id("io.github.drownek.paper-e2e") version "1.0.2"
 }
 
 e2e {
@@ -15,11 +15,42 @@ e2e {
     testsDir.set(file("src/test/e2e"))
 }
 
+val downloadPlaceholderAPI by tasks.registering {
+    val pluginsDir = layout.projectDirectory.dir("run/plugins")
+    val papiJar = pluginsDir.file("PlaceholderAPI.jar")
+    
+    outputs.file(papiJar)
+    
+    doLast {
+        val pluginsDirFile = pluginsDir.asFile
+        if (!pluginsDirFile.exists()) {
+            pluginsDirFile.mkdirs()
+        }
+        
+        val papiFile = papiJar.asFile
+        if (!papiFile.exists()) {
+            val url = uri("https://hangarcdn.papermc.io/plugins/HelpChat/PlaceholderAPI/versions/2.11.6/PAPER/PlaceholderAPI-2.11.6.jar").toURL()
+            println("Downloading PlaceholderAPI...")
+            url.openStream().use { input ->
+                papiFile.outputStream().use { output ->
+                    input.copyTo(output)
+                }
+            }
+            println("PlaceholderAPI downloaded to ${papiFile.absolutePath}")
+        }
+    }
+}
+
+tasks.named("testE2E") {
+    dependsOn(downloadPlaceholderAPI)
+}
+
 bukkit {
     main = "me.drownek.staffactivity.StaffActivityPlugin"
     apiVersion = "1.13"
     name = "StaffActivityMonitor"
     author = "Drownek"
+    softDepend = listOf("PlaceholderAPI")
     version = "${project.version}"
 }
 
@@ -31,6 +62,8 @@ dependencies {
     implementation("io.github.drownek:platform-bukkit:2.3.2-SNAPSHOT")
 
     implementation("org.bstats:bstats-bukkit:3.0.2")
+
+    compileOnly("me.clip:placeholderapi:2.11.6")
 
     /* lombok */
     val lombok = "1.18.32"

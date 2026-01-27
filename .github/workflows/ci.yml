@@ -2,9 +2,9 @@ name: Bukkit Plugin CI
 
 on:
   push:
-    branches: [ main, master, develop, ci-test ]
+    branches: [ main, master, develop, ci-test, placeholderapi ]
   pull_request:
-    branches: [ main, master, develop, ci-test ]
+    branches: [ main, master, develop, ci-test, placeholderapi ]
 
 jobs:
   build:

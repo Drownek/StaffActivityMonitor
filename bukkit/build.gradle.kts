@@ -98,10 +98,6 @@ val randomPort = false
 val port = 25566
 
 val runVersions = mapOf(
-    "1.8.8" to 17,
-    "1.12.2" to 17,
-    "1.13.2" to 17,
-    "1.16.5" to 17,
     "1.17.1" to 17,
     "1.18.2" to 17,
     "1.19.4" to 19,

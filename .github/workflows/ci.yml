@@ -56,10 +56,6 @@ jobs:
       fail-fast: false
       matrix:
         minecraft-task:
-          - run1_8_8
-          - run1_12_2
-          - run1_13_2
-          - run1_16_5
           - run1_17_1
           - run1_18_2
           - run1_19_4

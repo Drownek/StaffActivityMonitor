@@ -7,7 +7,7 @@ subprojects {
     apply(plugin = "maven-publish")
 
     group = "me.drownek"
-    version = "1.2.7"
+    version = "1.2.7-SNAPSHOT"
 
     tasks.withType<JavaCompile> {
         options.compilerArgs.add("-parameters")

@@ -2,7 +2,6 @@ import { test, expect, type TestContext } from '@drownek/paper-e2e-runner';
 
 async function setupStaff({ player, server }: TestContext) {
     await server.execute(`op ${player.username}`);
-    await new Promise(r => setTimeout(r, 500));
 }
 
 test('activity tracking records player messages', async (context: TestContext) => {

@@ -2,12 +2,10 @@ import { test, expect, type TestContext } from '@drownek/paper-e2e-runner';
 
 async function setupStaff({ player, server }: TestContext) {
     await server.execute(`op ${player.username}`);
-    await new Promise(r => setTimeout(r, 500));
 }
 
 test('time period selector shows all periods', async ({ player, server }) => {
     await server.execute(`op ${player.username}`);
-    await new Promise(r => setTimeout(r, 500));
 
     const guiPromise = player.waitForGui('Select Time Period');
     await player.chat('/staffactivity report');
@@ -29,7 +27,6 @@ test('time period selector shows all periods', async ({ player, server }) => {
 
 test('clicking period opens activity report', async ({ player, server }) => {
     await server.execute(`op ${player.username}`);
-    await new Promise(r => setTimeout(r, 500));
 
     const selectorPromise = player.waitForGui('Select Time Period');
     await player.chat('/staffactivity report');

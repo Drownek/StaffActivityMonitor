@@ -40,8 +40,10 @@ public class ActivityPlayerService {
 
     public Duration getPlayerTotalActivityTime(ActivityPlayer activityPlayer) {
         return activityPlayer.getEntries().stream()
-                .filter(entry -> entry.getEndTime() != null)
-                .map(entry -> Duration.between(entry.getStartTime(), entry.getEndTime()))
+                .map(entry -> {
+                    Instant endTime = Optional.ofNullable(entry.getEndTime()).orElse(Instant.now());
+                    return Duration.between(entry.getStartTime(), endTime);
+                })
                 .reduce(Duration.ZERO, Duration::plus);
     }
 }

@@ -2,12 +2,10 @@ import { test, expect, type TestContext } from '@drownek/paper-e2e-runner';
 
 async function setupStaff({ player, server }: TestContext) {
     await server.execute(`op ${player.username}`);
-    await new Promise(r => setTimeout(r, 500));
 }
 
 test('view command opens staff activity list', async ({ player, server }) => {
     await server.execute(`op ${player.username}`);
-    await new Promise(r => setTimeout(r, 500));
 
     await player.chat('/staffactivity view');
     const gui = await player.waitForGui('Staff activity');
@@ -21,7 +19,6 @@ test('view command opens staff activity list', async ({ player, server }) => {
 
 test('report command opens time period selector', async ({ player, server }) => {
     await server.execute(`op ${player.username}`);
-    await new Promise(r => setTimeout(r, 500));
 
     await player.chat('/staffactivity report');
     const gui = await player.waitForGui('Select Time Period');
@@ -35,7 +32,6 @@ test('report command opens time period selector', async ({ player, server }) => 
 
 test('top command opens activity report for all time', async ({ player, server }) => {
     await server.execute(`op ${player.username}`);
-    await new Promise(r => setTimeout(r, 500));
 
     await player.chat('/staffactivity top');
     const gui = await player.waitForGui('Activity Report');
@@ -46,7 +42,6 @@ test('top command opens activity report for all time', async ({ player, server }
 
 test('report with period argument opens report directly', async ({ player, server }) => {
     await server.execute(`op ${player.username}`);
-    await new Promise(r => setTimeout(r, 500));
 
     await player.chat('/staffactivity report today');
     const gui = await player.waitForGui('Activity Report');
@@ -58,8 +53,7 @@ test('report with period argument opens report directly', async ({ player, serve
 
 test('invalid time period shows error message', async ({ player, server }) => {
     await server.execute(`op ${player.username}`);
-    await new Promise(r => setTimeout(r, 500));
-    
+
     await player.chat('/staffactivity report invalid-period');
     await expect(player).toHaveReceivedMessage('Invalid time period');
 });

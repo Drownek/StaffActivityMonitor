@@ -22,6 +22,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class StaffActivityExpansion extends PlaceholderExpansion {
@@ -174,8 +175,7 @@ public class StaffActivityExpansion extends PlaceholderExpansion {
 
     private String getLastSeen(ActivityPlayer activityPlayer) {
         return activityPlayer.getEntries().stream()
-                .filter(entry -> entry.getEndTime() != null)
-                .map(ActivityEntry::getEndTime)
+                .map(activityEntry -> Optional.ofNullable(activityEntry.getEndTime()).orElse(Instant.now()))
                 .max(Instant::compareTo)
                 .map(instant -> DateTimeFormatter.ofPattern(config.placeholders.lastSeenFormat)
                         .withZone(ZoneId.systemDefault())
@@ -185,8 +185,10 @@ public class StaffActivityExpansion extends PlaceholderExpansion {
 
     private Duration getAverageSessionDuration(ActivityPlayer activityPlayer) {
         List<Duration> durations = activityPlayer.getEntries().stream()
-                .filter(entry -> entry.getEndTime() != null)
-                .map(entry -> Duration.between(entry.getStartTime(), entry.getEndTime()))
+                .map(entry -> {
+                    Instant endTime = Optional.ofNullable(entry.getEndTime()).orElse(Instant.now());
+                    return Duration.between(entry.getStartTime(), endTime);
+                })
                 .toList();
 
         if (durations.isEmpty()) {

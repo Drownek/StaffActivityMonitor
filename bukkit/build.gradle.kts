@@ -5,7 +5,7 @@ plugins {
     id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
     id("com.gradleup.shadow") version "9.0.0-beta12"
     id("xyz.jpenilla.run-paper") version "2.3.1"
-    id("io.github.drownek.paper-e2e") version "1.0.4"
+    id("io.github.drownek.paper-e2e") version "1.0.5"
 }
 
 e2e {

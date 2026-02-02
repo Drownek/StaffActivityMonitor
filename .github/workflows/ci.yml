@@ -40,7 +40,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        minecraft-task: [run1_17_1, run1_18_2, run1_19_4, run1_21_11]
+        minecraft-task: [ run1_17_1, run1_18_2, run1_19_4, run1_21_11 ]
 
     steps:
       - uses: actions/checkout@v4
@@ -65,22 +65,21 @@ jobs:
 
       - name: Verify Log Messages
         run: |
-          # 1. Check if the server actually finished starting
-          if ! grep -Fq "Done" server.log; then
-            echo "::error::Server never reached 'Done' state!"
+          if ! grep -Fq "Done (" server.log; then
+            echo "::error::Server never finished starting!"
+            echo "=== Last 20 lines of logs ==="
+            tail -n 20 server.log
             exit 1
           fi
-
-          # 2. Check if plugin actually loaded
+          
           if grep -Fq "[StaffActivityMonitor] Plugin loaded successfully!" server.log; then
             echo "✅ Plugin loaded successfully!"
           else
             echo "::error::Plugin did not print success message!"
-            echo "=== Relevant Log Section ==="
-            grep -C 5 "StaffActivityMonitor" server.log || tail -n 20 server.log
+            echo "=== Full Log for Context ==="
+            cat server.log
             exit 1
           fi
-
   e2e-test:
     name: Run E2E Tests
     needs: smoke-test-matrix

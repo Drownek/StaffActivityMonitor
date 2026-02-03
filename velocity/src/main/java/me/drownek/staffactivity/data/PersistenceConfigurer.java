@@ -26,7 +26,7 @@ public class PersistenceConfigurer {
             case MYSQL:
                 // setup hikari based on your needs, e.g. using config
                 HikariConfig mariadbHikari = new HikariConfig();
-                mariadbHikari.setJdbcUrl(config.storage.uri);
+                mariadbHikari.setJdbcUrl("jdbc:mysql://" + config.storage.host + ":" + config.storage.port + "/" + config.storage.database);
                 mariadbHikari.setUsername(config.storage.user);
                 mariadbHikari.setPassword(config.storage.password);
                 // it is REQUIRED to use json configurer for the mariadb backend
@@ -34,7 +34,7 @@ public class PersistenceConfigurer {
             case POSTGRES:
                 // setup hikari based on your needs, e.g. using config
                 HikariConfig postgresHikari = new HikariConfig();
-                postgresHikari.setJdbcUrl(config.storage.uri);
+                postgresHikari.setJdbcUrl("jdbc:postgresql://" + config.storage.host + ":" + config.storage.port + "/" + config.storage.database);
                 postgresHikari.setUsername(config.storage.user);
                 postgresHikari.setPassword(config.storage.password);
                 postgresHikari.setDriverClassName("org.postgresql.Driver");

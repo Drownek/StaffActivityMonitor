@@ -21,9 +21,14 @@ public class PluginConfig extends OkaeriConfig {
         @Comment("Prefix for the storage")
         public String prefix = "StaffActivityMonitor";
 
-        @Comment("MYSQL  : jdbc:mysql://localhost:3306/db")
-        @Comment("POSTGRES  : jdbc:postgresql://localhost:5432/db")
-        public String uri = "jdbc:mysql://localhost:3306/db";
+        @Comment("Database host")
+        public String host = "localhost";
+
+        @Comment("Database port (default 3306 for MySQL, 5432 for PostgreSQL)")
+        public int port = 3306;
+
+        @Comment("Database name")
+        public String database = "db";
 
         public String user = "";
 

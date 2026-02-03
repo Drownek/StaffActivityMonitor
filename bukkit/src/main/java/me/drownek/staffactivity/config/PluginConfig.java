@@ -85,11 +85,11 @@ public class PluginConfig extends OkaeriConfig {
         ))
         .asItemStack());
 
-    @Comment({"Whether to use proxy mode or not", "NOTE: When true, storageType must be set to MYSQL"})
-    public boolean proxyMode = false;
-
     @Comment("PlaceholderAPI configuration")
     public PlaceholderConfig placeholders = new PlaceholderConfig();
+
+    @Comment({"Whether to use proxy mode or not", "NOTE: When true, storageType must be set to MYSQL"})
+    public boolean proxyMode = false;
 
     @Comment("Database configuration")
     public StorageConfig storage = new StorageConfig();

@@ -1,12 +1,9 @@
-package me.drownek.staffactivity.integration;
+package me.drownek.staffactivity.integration.papi;
 
 import eu.okaeri.injector.annotation.Inject;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import me.drownek.platform.core.annotation.Component;
 import me.drownek.staffactivity.config.PluginConfig;
-import me.drownek.staffactivity.core.ActivityEntry;
 import me.drownek.staffactivity.core.ActivityPlayer;
-import me.drownek.staffactivity.core.action.Action;
 import me.drownek.staffactivity.core.action.ActionType;
 import me.drownek.staffactivity.core.report.PlayerActivityReport;
 import me.drownek.staffactivity.core.report.TimePeriod;
@@ -24,7 +21,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
-@Component
 public class StaffActivityExpansion extends PlaceholderExpansion {
 
     private @Inject PluginConfig config;

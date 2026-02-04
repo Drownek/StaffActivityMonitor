@@ -80,10 +80,15 @@ jobs:
             cat server.log
             exit 1
           fi
+
   e2e-test:
-    name: Run E2E Tests
+    name: Run E2E Tests (Attempt ${{ matrix.run }})
     needs: smoke-test-matrix
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        run: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
     steps:
       - uses: actions/checkout@v4
@@ -102,5 +107,5 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: e2e-reports
+          name: e2e-reports-run-${{ matrix.run }}
           path: build/reports/tests/

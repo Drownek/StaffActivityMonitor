@@ -30,9 +30,13 @@ test('clicking activity entry opens detailed view', async (context: TestContext)
     const { player, server } = context;
     await setupStaff(context);
 
+    await new Promise(r => setTimeout(r, 200));
+
     await player.chat('detail test message 1');
     await player.chat('/help');
     await player.chat('detail test message 2');
+
+    await new Promise(r => setTimeout(r, 200));
 
     await player.chat(`/staffactivity view ${player.username}`);
     const mainGui = await player.waitForGui('Last user activity (1/1)');

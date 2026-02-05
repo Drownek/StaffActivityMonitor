@@ -15,17 +15,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      # Install Java 16 first (for toolchain)
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '16'
+
+      # Install Java 17 last (this becomes JAVA_HOME for Gradle)
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
           cache: 'gradle'
-
-      # Add Java 16 for the core module
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '16'
 
       - name: Build Plugin
         run: |
@@ -50,17 +52,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      # Install Java 16 first (for toolchain)
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '16'
+
+      # Install Java 17 last (this becomes JAVA_HOME for Gradle)
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
           cache: 'gradle'
-
-      # Add Java 16 for the core module
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '16'
 
       - name: Grant execute permission
         run: chmod +x gradlew
@@ -104,17 +108,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      # Install Java 16 first (for toolchain)
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '16'
+
+      # Install Java 17 last (this becomes JAVA_HOME for Gradle)
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
           cache: 'gradle'
-
-      # Add Java 16 for the core module
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '16'
 
       - name: Run E2E Suite
         run: |

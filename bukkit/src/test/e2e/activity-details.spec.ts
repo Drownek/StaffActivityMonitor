@@ -1,12 +1,7 @@
 import {expect, type ItemWrapper, test, type TestContext} from '@drownek/paper-e2e-runner';
 
-async function setupStaff({ player, server }: TestContext) {
-    await server.execute(`op ${player.username}`);
-}
-
-test('activity view shows session entries with timestamps', async (context: TestContext) => {
-    const { player, server } = context;
-    await setupStaff(context);
+test('activity view shows session entries with timestamps', async ({ player }: TestContext) => {
+    await player.makeOp();
 
     await player.chat('session test message');
     await new Promise(r => setTimeout(r, 1000));
@@ -26,9 +21,8 @@ test('activity view shows session entries with timestamps', async (context: Test
     expect(sessionEntry.hasLore('To')).toBe(true);
 });
 
-test('clicking activity entry opens detailed view', async (context: TestContext) => {
-    const { player, server } = context;
-    await setupStaff(context);
+test('clicking activity entry opens detailed view', async ({ player }: TestContext) => {
+    await player.makeOp();
 
     await new Promise(r => setTimeout(r, 200));
 
@@ -61,10 +55,8 @@ test('clicking activity entry opens detailed view', async (context: TestContext)
     expect(hasCommand).toBe(true);
 });
 
-test('sort toggle changes activity order', async (context: TestContext) => {
-    const { player, server } = context;
-
-    await setupStaff(context);
+test('sort toggle changes activity order', async ({ player }: TestContext) => {
+    await player.makeOp();
 
     await player.chat('sort test message');
 

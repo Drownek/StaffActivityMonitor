@@ -1,12 +1,7 @@
 import { test, expect, type TestContext } from '@drownek/paper-e2e-runner';
 
-async function setupStaff({ player, server }: TestContext) {
-    await server.execute(`op ${player.username}`);
-}
-
-test('activity tracking records player messages', async (context: TestContext) => {
-    const { player, server } = context;
-    await setupStaff(context);
+test('activity tracking records player messages', async ({ player }: TestContext) => {
+    await player.makeOp();
 
     await player.chat('Hello this is a test message');
     await player.chat('Another test message for tracking');
@@ -28,9 +23,8 @@ test('activity tracking records player messages', async (context: TestContext) =
     const messageCount = parseInt(lore.match(/(\d+)\s+messages?/)?.[1] || '0');
     expect(messageCount).toBeGreaterThanOrEqual(2);
 });
-test('activity tracking records player commands', async (context: TestContext) => {
-    const { player, server } = context;
-    await setupStaff(context);
+test('activity tracking records player commands', async ({ player }: TestContext) => {
+    await player.makeOp();
 
     await player.chat('/help');
     await player.chat('/list');

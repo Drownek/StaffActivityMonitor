@@ -1,11 +1,7 @@
 import { test, expect, type TestContext } from '@drownek/paper-e2e-runner';
 
-async function setupStaff({ player, server }: TestContext) {
-    await server.execute(`op ${player.username}`);
-}
-
-test('time period selector shows all periods', async ({ player, server }) => {
-    await server.execute(`op ${player.username}`);
+test('time period selector shows all periods', async ({ player }) => {
+    await player.makeOp();
 
     const guiPromise = player.waitForGui('Select Time Period');
     await player.chat('/staffactivity report');
@@ -25,8 +21,8 @@ test('time period selector shows all periods', async ({ player, server }) => {
     expect(allPeriodItems.length).toBe(6);
 });
 
-test('clicking period opens activity report', async ({ player, server }) => {
-    await server.execute(`op ${player.username}`);
+test('clicking period opens activity report', async ({ player }) => {
+    await player.makeOp();
 
     const selectorPromise = player.waitForGui('Select Time Period');
     await player.chat('/staffactivity report');
@@ -43,9 +39,8 @@ test('clicking period opens activity report', async ({ player, server }) => {
     expect(selector.getTitle()).not.toBe(report.getTitle()); // Verify navigation occurred
 });
 
-test('report gui shows player rankings with stats', async (context: TestContext) => {
-    const { player, server } = context;
-    await setupStaff(context);
+test('report gui shows player rankings with stats', async ({ player }: TestContext) => {
+    await player.makeOp();
 
     await player.chat('test message for report');
     await player.chat('/help');

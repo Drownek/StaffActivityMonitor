@@ -5,11 +5,11 @@
     "test": "tsc && paper-e2e-runner"
   },
   "dependencies": {
-    "@drownek/paper-e2e-runner": "1.0.6-beta.7"
+    "@drownek/paper-e2e-runner": "1.0.6-beta.8"
   },
   "devDependencies": {
-    "typescript": "^5.7.3",
     "@types/node": "^22.10.5",
-    "mineflayer": "^4.0.0"
+    "mineflayer": "^4.0.0",
+    "typescript": "^5.7.3"
   }
 }

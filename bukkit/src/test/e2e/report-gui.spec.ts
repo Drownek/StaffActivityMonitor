@@ -24,15 +24,16 @@ test('time period selector shows all periods', async ({ player }) => {
 test('clicking period opens activity report', async ({ player }) => {
     await player.makeOp();
 
-    const selectorPromise = player.waitForGui(g => g.title.includes('Select Time Period'));
     await player.chat('/staffactivity report');
-    const selector = await selectorPromise;
+    const selector = await player.waitForGui(g =>
+        g.title.includes('Select Time Period') &&
+        g.hasItem(i => i.name.includes('clock'))
+    );
 
     expect(selector).toBeTruthy();
 
-    const reportPromise = player.waitForGui(g => g.title.includes('Activity Report'));
     await selector.clickItem(i => i.name.includes('clock'));
-    const report = await reportPromise;
+    const report = await player.waitForGui(g => g.title.includes('Activity Report'));
 
     expect(report).toBeTruthy();
     expect(report.title).toContain('Activity Report');

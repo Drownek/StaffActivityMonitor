@@ -29,9 +29,11 @@ test('activity tracking records player commands', async ({ player }: TestContext
     await player.chat('/help');
     await player.chat('/list');
 
-    const guiPromise = player.waitForGui(g => g.title.includes('Last user activity'));
     await player.chat(`/staffactivity view ${player.username}`);
-    const gui = await guiPromise;
+    const gui = await player.waitForGui(g =>
+        g.title.includes('Last user activity') &&
+        g.hasItem(i => i.hasLore('commands'))
+    );
 
     const commandItem = gui.findItem(i => i.hasLore('commands'));
 

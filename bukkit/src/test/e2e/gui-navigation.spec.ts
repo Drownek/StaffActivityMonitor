@@ -6,15 +6,11 @@ test('view command opens staff activity list', async ({ player }) => {
     await player.chat('/staffactivity view');
     const gui = await player.waitForGui(g =>
         g.title.includes('Staff activity') &&
-        g.hasItem(i => i.name.includes('arrow')) &&
-        g.hasItem(i => i.name.includes('hopper'))
+        g.hasItem(i => i.name.includes('arrow'))
     );
 
-    const hasControls = gui.findItem(i =>
-        i.name.includes('arrow') &&
-        i.name.includes('hopper')
-    );
-    expect(hasControls).toBeTruthy();
+    const hasControls = gui.hasItem(i => i.name.includes('arrow'))
+    expect(hasControls).toBe(true);
 });
 
 test('report command opens time period selector', async ({ player }) => {

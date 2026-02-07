@@ -4,12 +4,16 @@ test('view command opens staff activity list', async ({ player }) => {
     await player.makeOp();
 
     await player.chat('/staffactivity view');
-    const gui = await player.waitForGui(g => g.title.includes('Staff activity'));
+    const gui = await player.waitForGui(g =>
+        g.title.includes('Staff activity') &&
+        g.hasItem(i => i.name.includes('arrow')) &&
+        g.hasItem(i => i.name.includes('hopper'))
+    );
 
-    expect(gui).toBeTruthy();
-    expect(gui.title).toContain('Staff activity');
-    // Verify it has navigation controls
-    const hasControls = gui.findItem(i => i.name.includes('arrow') || i.name.includes('barrier'));
+    const hasControls = gui.findItem(i =>
+        i.name.includes('arrow') &&
+        i.name.includes('hopper')
+    );
     expect(hasControls).toBeTruthy();
 });
 

@@ -6,9 +6,11 @@ test('activity tracking records player messages', async ({ player }: TestContext
     await player.chat('Hello this is a test message');
     await player.chat('Another test message for tracking');
 
-    const guiPromise = player.waitForGui(g => g.title.includes('Last user activity'));
     await player.chat(`/staffactivity view ${player.username}`);
-    const gui = await guiPromise;
+    const gui = await player.waitForGui(g =>
+        g.title.includes('Last user activity')
+        && g.hasItem(i => i.hasLore('messages'))
+    );
 
     const messageItem = gui.findItem(i => i.hasLore('messages'));
 

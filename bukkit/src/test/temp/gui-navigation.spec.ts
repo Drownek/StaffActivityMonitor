@@ -1,4 +1,4 @@
-import { test, expect, type TestContext } from '@drownek/paper-e2e-runner';
+import { test, expect, type TestContext } from '../../../../01_Drafts/paper-e2e-test-framework/runner-package/runner';
 
 test('view command opens staff activity list', async ({ player }) => {
     await player.makeOp();

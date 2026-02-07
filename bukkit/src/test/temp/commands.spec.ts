@@ -1,4 +1,4 @@
-import { test, expect } from '@drownek/paper-e2e-runner';
+import { test, expect } from '../../../../01_Drafts/paper-e2e-test-framework/runner-package/runner';
 
 test('commands require staffactivity.commands permission', async ({ player }) => {
     await player.chat('/staffactivity reload');

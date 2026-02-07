@@ -1,4 +1,4 @@
-import { test, expect } from '../../../../01_Drafts/paper-e2e-test-framework/runner-package/runner';
+import {expect, test} from "@drownek/paper-e2e-runner";
 
 test('plugin loads and handles commands', async ({ player }) => {
     await player.chat('/staffactivity reload');

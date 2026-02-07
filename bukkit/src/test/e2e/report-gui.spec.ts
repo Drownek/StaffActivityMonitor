@@ -1,9 +1,9 @@
-import { test, expect, type TestContext } from '../../../../01_Drafts/paper-e2e-test-framework/runner-package/runner';
+import {expect, test, type TestContext} from '@drownek/paper-e2e-runner';
 
 test('time period selector shows all periods', async ({ player }) => {
     await player.makeOp();
 
-    const guiPromise = player.waitForGui('Select Time Period');
+    const guiPromise = player.waitForGui(g => g.title.includes('Select Time Period'));
     await player.chat('/staffactivity report');
     const gui = await guiPromise;
 
@@ -24,19 +24,19 @@ test('time period selector shows all periods', async ({ player }) => {
 test('clicking period opens activity report', async ({ player }) => {
     await player.makeOp();
 
-    const selectorPromise = player.waitForGui('Select Time Period');
+    const selectorPromise = player.waitForGui(g => g.title.includes('Select Time Period'));
     await player.chat('/staffactivity report');
     const selector = await selectorPromise;
 
     expect(selector).toBeTruthy();
 
-    const reportPromise = player.waitForGui('Activity Report');
+    const reportPromise = player.waitForGui(g => g.title.includes('Activity Report'));
     await selector.clickItem(i => i.name.includes('clock'));
     const report = await reportPromise;
 
     expect(report).toBeTruthy();
-    expect(report.getTitle()).toContain('Activity Report');
-    expect(selector.getTitle()).not.toBe(report.getTitle()); // Verify navigation occurred
+    expect(report.title).toContain('Activity Report');
+    expect(selector.title).not.toBe(report.title); // Verify navigation occurred
 });
 
 test('report gui shows player rankings with stats', async ({ player }: TestContext) => {
@@ -46,7 +46,7 @@ test('report gui shows player rankings with stats', async ({ player }: TestConte
     await player.chat('/help');
     await new Promise(r => setTimeout(r, 1000));
 
-    const guiPromise = player.waitForGui('Activity Report');
+    const guiPromise = player.waitForGui(g => g.title.includes('Activity Report'));
     await player.chat('/staffactivity top');
     const gui = await guiPromise;
 

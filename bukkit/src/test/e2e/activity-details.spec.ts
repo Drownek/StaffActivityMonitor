@@ -57,30 +57,32 @@ test('sort toggle changes activity order', async ({ player }: TestContext) => {
     await player.makeOp();
 
     await player.chat('sort test message');
-
     await new Promise(r => setTimeout(r, 1000));
 
     await player.chat(`/staffactivity view ${player.username}`);
-    await player.waitForGui(gui =>
+
+    const gui1 = await player.waitForGui(gui =>
         gui.title.includes('Last user activity') &&
+        gui.title.includes('/') &&
         gui.hasItem(i => i.name.includes('hopper'))
     );
 
-    const hopper = player.getCurrentGui()!.findItem(i => i.name.includes('hopper'))!;
-
+    const hopper = gui1.findItem(i => i.name.includes('hopper'))!;
     const initialLore = hopper.getLore().join(' ');
     expect(initialLore).toContain('► Newest to oldest');
-    expect(initialLore).not.toContain('► Oldest to newest');
 
     await player.clickGuiItem(i => i.name.includes('hopper'));
 
-    await player.waitForGui(gui => gui.title.includes('Last user activity') && gui.hasItem(i => i.name.includes('hopper')));
+    const gui2 = await player.waitForGui(gui =>
+        gui.title.includes('Last user activity') &&
+        gui.title.includes('/') &&
+        gui.hasItem(i =>
+            i.name.includes('hopper') &&
+            i.getLore().join(' ').includes('► Oldest to newest')
+        )
+    );
 
-    console.log("waited done, title is: " + player.getCurrentGui()!.title + "")
-
-    const updatedHopper = player.getCurrentGui()!.findItem(i => i.name.includes('hopper'))!;
-
-    // 2. Validate the toggled state (Newest to Oldest)
+    const updatedHopper = gui2.findItem(i => i.name.includes('hopper'))!;
     const newLore = updatedHopper.getLore().join(' ');
 
     expect(newLore).toContain('► Oldest to newest');

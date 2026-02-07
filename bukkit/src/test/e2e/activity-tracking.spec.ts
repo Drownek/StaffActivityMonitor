@@ -1,4 +1,4 @@
-import { test, expect, type TestContext } from '../../../../01_Drafts/paper-e2e-test-framework/runner-package/runner';
+import {expect, test, type TestContext} from '@drownek/paper-e2e-runner';
 
 test('activity tracking records player messages', async ({ player }: TestContext) => {
     await player.makeOp();
@@ -6,7 +6,7 @@ test('activity tracking records player messages', async ({ player }: TestContext
     await player.chat('Hello this is a test message');
     await player.chat('Another test message for tracking');
 
-    const guiPromise = player.waitForGui('Last user activity');
+    const guiPromise = player.waitForGui(g => g.title.includes('Last user activity'));
     await player.chat(`/staffactivity view ${player.username}`);
     const gui = await guiPromise;
 
@@ -29,7 +29,7 @@ test('activity tracking records player commands', async ({ player }: TestContext
     await player.chat('/help');
     await player.chat('/list');
 
-    const guiPromise = player.waitForGui('Last user activity');
+    const guiPromise = player.waitForGui(g => g.title.includes('Last user activity'));
     await player.chat(`/staffactivity view ${player.username}`);
     const gui = await guiPromise;
 

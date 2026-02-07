@@ -1,13 +1,13 @@
-import { test, expect, type TestContext } from '../../../../01_Drafts/paper-e2e-test-framework/runner-package/runner';
+import {expect, test, type TestContext} from '@drownek/paper-e2e-runner';
 
 test('view command opens staff activity list', async ({ player }) => {
     await player.makeOp();
 
     await player.chat('/staffactivity view');
-    const gui = await player.waitForGui('Staff activity');
+    const gui = await player.waitForGui(g => g.title.includes('Staff activity'));
 
     expect(gui).toBeTruthy();
-    expect(gui.getTitle()).toContain('Staff activity');
+    expect(gui.title).toContain('Staff activity');
     // Verify it has navigation controls
     const hasControls = gui.findItem(i => i.name.includes('arrow') || i.name.includes('barrier'));
     expect(hasControls).toBeTruthy();
@@ -17,10 +17,10 @@ test('report command opens time period selector', async ({ player }) => {
     await player.makeOp();
 
     await player.chat('/staffactivity report');
-    const gui = await player.waitForGui('Select Time Period');
+    const gui = await player.waitForGui(g => g.title.includes('Select Time Period'));
 
     expect(gui).toBeTruthy();
-    expect(gui.getTitle()).toBe('Select Time Period');
+    expect(gui.title).toBe('Select Time Period');
     // Verify it has period options
     const periods = gui.findAllItems(i => i.name.includes('clock'));
     expect(periods.length).toBeGreaterThan(0);
@@ -30,20 +30,20 @@ test('top command opens activity report for all time', async ({ player }) => {
     await player.makeOp();
 
     await player.chat('/staffactivity top');
-    const gui = await player.waitForGui('Activity Report');
+    const gui = await player.waitForGui(g => g.title.includes('Activity Report'));
 
     expect(gui).toBeTruthy();
-    expect(gui.getTitle()).toContain('Activity Report');
+    expect(gui.title).toContain('Activity Report');
 });
 
 test('report with period argument opens report directly', async ({ player }) => {
     await player.makeOp();
 
     await player.chat('/staffactivity report today');
-    const gui = await player.waitForGui('Activity Report');
+    const gui = await player.waitForGui(g => g.title.includes('Activity Report'));
 
     expect(gui).toBeTruthy();
-    expect(gui.getTitle()).toContain('Activity Report');
+    expect(gui.title).toContain('Activity Report');
     // Verify the period is reflected in the GUI or data
 });
 
@@ -61,10 +61,10 @@ test('view command with player name opens player activity', async ({ player }: T
     await new Promise(r => setTimeout(r, 500));
 
     await player.chat(`/staffactivity view ${player.username}`);
-    const gui = await player.waitForGui('Last user activity');
+    const gui = await player.waitForGui(g => g.title.includes('Last user activity'));
 
     expect(gui).toBeTruthy();
-    expect(gui.getTitle()).toContain('Last user activity');
+    expect(gui.title).toContain('Last user activity');
     // Verify it shows activity for the specified player
     const activityEntry = gui.findItem(i => i.name.includes('clock'));
     expect(activityEntry).toBeTruthy();

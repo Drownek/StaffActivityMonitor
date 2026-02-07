@@ -37,24 +37,16 @@ test('clicking activity entry opens detailed view', async ({ player }: TestConte
 
     await player.clickGuiItem(i => i.name === 'clock');
 
-    await player.waitForGui(gui =>
+    const gui = await player.waitForGui(gui =>
         gui.title.includes('User activity details') &&
         gui.hasItem(i => i.name === 'paper') &&
         gui.hasItem(i => i.name === 'map')
     );
 
-    // let g1 = player.getCurrentGui()!;
-    // console.log("title is " + g1.title)
-
-    // let g2 = player.getCurrentGui()!;
-
-    // console.log("g1 === g2 ? " + (g1 === g2))
-    // console.log("g1 items size= " + g1.items.length + ", g2 items size" + g2.items.length)
-    // console.log("player currentWindow items length = " + player.bot.currentWindow?.slots.length)
-    const logs = player.getCurrentGui()!.findAllItems(i => i.name === 'paper' || i.name === 'map');
+    const logs = gui.findAllItems(i => i.name === 'paper' || i.name === 'map');
 
     expect(logs.length).toBeGreaterThan(0);
-    // Verify we have at least our test messages and command
+
     const hasMessage = logs.some(log => log.hasLore('detail test message'));
     const hasCommand = logs.some(log => log.hasLore('/help'));
     expect(hasMessage).toBe(true);

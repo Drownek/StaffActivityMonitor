@@ -46,9 +46,11 @@ test('report gui shows player rankings with stats', async ({ player }: TestConte
     await player.chat('/help');
     await new Promise(r => setTimeout(r, 1000));
 
-    const guiPromise = player.waitForGui(g => g.title.includes('Activity Report'));
     await player.chat('/staffactivity top');
-    const gui = await guiPromise;
+    const gui = await player.waitForGui(g =>
+        g.title.includes('Activity Report') &&
+        g.hasItem(i => i.name.includes('head'))
+    );
 
     const playerEntry = gui.findItem(i =>
       i.name.includes('head') &&

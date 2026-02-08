@@ -21,36 +21,75 @@ test('activity view shows session entries with timestamps', async ({ player }: T
 });
 
 test('clicking activity entry opens detailed view', async ({ player }: TestContext) => {
+    // --- Test setup ---------------------------------------------------------
     await player.makeOp();
 
+    // Produce multiple types of activity: chat messages and commands
     await player.chat('detail test message 1');
     await player.chat('/help');
     await player.chat('detail test message 2');
 
+    // NOTE: Intentional sleep to ensure activity is logged server-side
     await new Promise(r => setTimeout(r, 5000));
 
+    // Open the staff activity GUI
     await player.chat(`/staffactivity view ${player.username}`);
 
-    await player.waitForGui(gui =>
-        gui.title.includes('Last user activity') && gui.hasItem(i => i.name === 'clock')
+    // --- First GUI context --------------------------------------------------
+    // `player.gui()` waits ONLY until a GUI with matching title exists.
+    // The returned handle is LIVE - always reflects current GUI state.
+    const activityListGui = await player.gui({
+        title: /Last user activity/
+    });
+
+    // --- Locator for activity entry -----------------------------------------
+    // This locator represents \"the first clock item in the current GUI\".
+    // It will be re-evaluated each time it's used.
+    const activityEntry = activityListGui.locator(i => i.name === 'clock');
+
+    // --- Interaction --------------------------------------------------------
+    // Click the activity entry to open detailed view.
+    // This retries until the clock exists, then clicks it.
+    await activityEntry.click();
+
+    // --- Second GUI context -------------------------------------------------
+    // Wait for the detailed view GUI to open.
+    // This is a NEW GUI, so we get a new live handle.
+    const detailsGui = await player.gui({
+        title: /User activity details/
+    });
+
+    // --- Locators for specific log entries ----------------------------------
+    // Create locators for log entries containing specific content.
+    // Each locator represents \"the first paper/map item with this lore\".
+
+    const messageLog = detailsGui.locator(i =>
+        (i.name === 'paper' || i.name === 'map') &&
+        i.getLore().join(' ').includes('detail test message')
     );
 
-    await player.clickGuiItem(i => i.name === 'clock');
-
-    const gui = await player.waitForGui(gui =>
-        gui.title.includes('User activity details') &&
-        gui.hasItem(i => i.name === 'paper') &&
-        gui.hasItem(i => i.name === 'map')
+    const commandLog = detailsGui.locator(i =>
+        (i.name === 'paper' || i.name === 'map') &&
+        i.getLore().join(' ').includes('/help')
     );
 
-    const logs = gui.findAllItems(i => i.name === 'paper' || i.name === 'map');
+    // --- Assertions ---------------------------------------------------------
+    // These expectations RETRY until the conditions are met.
+    //
+    // Each assertion:
+    // - Keeps re-finding the item using the locator
+    // - Checks if the lore matches
+    // - Waits until true or times out
+    //
+    // This handles:
+    // - GUI opening with empty slots
+    // - Items appearing asynchronously
+    // - Lore being set after items appear
+    await expect(messageLog)
+        .toHaveLore('detail test message');
 
-    expect(logs.length).toBeGreaterThan(0);
-
-    const hasMessage = logs.some(log => log.hasLore('detail test message'));
-    const hasCommand = logs.some(log => log.hasLore('/help'));
-    expect(hasMessage).toBe(true);
-    expect(hasCommand).toBe(true);
+    await expect(commandLog)
+        .toHaveLore('/help');
 });
 
 test('sort toggle changes activity order', async ({ player }: TestContext) => {

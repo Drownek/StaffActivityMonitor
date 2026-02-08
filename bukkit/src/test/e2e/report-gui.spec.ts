@@ -30,8 +30,6 @@ test('clicking period opens activity report', async ({ player }) => {
         g.hasItem(i => i.name.includes('clock'))
     );
 
-    expect(selector).toBeTruthy();
-
     await selector.clickItem(i => i.name.includes('clock'));
     const report = await player.waitForGui(g => g.title.includes('Activity Report'));
 

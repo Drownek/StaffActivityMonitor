@@ -54,37 +54,32 @@ test('clicking activity entry opens detailed view', async ({ player }: TestConte
 });
 
 test('sort toggle changes activity order', async ({ player }: TestContext) => {
+    // Setup: Give player permissions and create activity
     await player.makeOp();
-
     await player.chat('sort test message');
     await new Promise(r => setTimeout(r, 1000));
 
+    // Open the staff activity GUI
     await player.chat(`/staffactivity view ${player.username}`);
 
-    const gui1 = await player.waitForGui(gui =>
-        gui.title.includes('Last user activity') &&
-        gui.title.includes('/') &&
-        gui.hasItem(i => i.name.includes('hopper'))
-    );
+    // Get a live handle to the GUI (waits only for title match, NOT for items/lore)
+    const gui = await player.gui({
+        title: /Last user activity/
+    });
 
-    const hopper = gui1.findItem(i => i.name.includes('hopper'))!;
-    const initialLore = hopper.getLore().join(' ');
-    expect(initialLore).toContain('► Newest to oldest');
+    // Create a locator (NOT a snapshot - re-evaluates each time it's used)
+    const sortToggle = gui.locator(i => i.name.includes('hopper'));
 
-    await player.clickGuiItem(i => i.name.includes('hopper'));
+    // Assertion with automatic retry - waits for lore to appear/update
+    await expect(sortToggle).toHaveLore('► Newest to oldest');
 
-    const gui2 = await player.waitForGui(gui =>
-        gui.title.includes('Last user activity') &&
-        gui.title.includes('/') &&
-        gui.hasItem(i =>
-            i.name.includes('hopper') &&
-            i.getLore().join(' ').includes('► Oldest to newest')
-        )
-    );
+    // Click also retries until the item exists
+    await sortToggle.click();
 
-    const updatedHopper = gui2.findItem(i => i.name.includes('hopper'))!;
-    const newLore = updatedHopper.getLore().join(' ');
+    // Same locator, same variable - but the GUI state has changed
+    // The expectation polls until the new lore appears
+    await expect(sortToggle).toHaveLore('► Oldest to newest');
 
-    expect(newLore).toContain('► Oldest to newest');
-    expect(newLore).not.toContain('► Newest to oldest');
+    // Negative assertion also retries (waits for old lore to disappear)
+    await expect(sortToggle).not.toHaveLore('► Newest to oldest');
 });

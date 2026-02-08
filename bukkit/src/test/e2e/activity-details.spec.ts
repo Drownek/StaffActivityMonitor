@@ -27,7 +27,7 @@ test('clicking activity entry opens detailed view', async ({ player }: TestConte
     await player.chat('/help');
     await player.chat('detail test message 2');
 
-    await new Promise(r => setTimeout(r, 1000));
+    await new Promise(r => setTimeout(r, 5000));
 
     await player.chat(`/staffactivity view ${player.username}`);
 

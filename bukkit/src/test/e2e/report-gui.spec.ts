@@ -43,20 +43,11 @@ test('report gui shows player rankings with stats', async ({ player }: TestConte
 
     // Locate player entry in rankings
     const playerEntry = gui.locator(i =>
-        i.name.includes('head') &&
-        (i.hasLore('Time online') ||
-            i.hasLore('Sessions') ||
-            i.hasLore('Commands') ||
-            i.hasLore('Messages'))
+        i.name.includes('head')
     );
 
-    // Verify at least one stat category exists
-    const lore = playerEntry.loreText();
-    console.log("lore: " + lore);
-    const hasStats = lore.includes('Time online') ||
-        lore.includes('Sessions') ||
-        lore.includes('Commands') ||
-        lore.includes('Messages');
-
-    expect(hasStats).toBe(true);
+    await expect(playerEntry).toHaveLore('Time online');
+    await expect(playerEntry).toHaveLore('Sessions');
+    await expect(playerEntry).toHaveLore('Commands');
+    await expect(playerEntry).toHaveLore('Messages');
 });

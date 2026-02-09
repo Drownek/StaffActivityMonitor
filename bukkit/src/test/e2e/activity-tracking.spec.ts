@@ -7,24 +7,17 @@ test('activity tracking records player messages', async ({ player }: TestContext
     await player.chat('Another test message for tracking');
 
     await player.chat(`/staffactivity view ${player.username}`);
-    const gui = await player.waitForGui(g =>
-        g.title.includes('Last user activity')
-        && g.hasItem(i => i.hasLore('messages'))
-    );
+    const gui = await player.gui({ title: /Last user activity/ });
 
-    const messageItem = gui.findItem(i => i.hasLore('messages'));
-
-    if (!messageItem) {
-        throw new Error('Message item not found in GUI');
-    }
-    expect(messageItem).toBeTruthy();
-    expect(messageItem.hasLore('messages')).toBe(true);
-
-    // Verify the count includes our messages
-    const lore = messageItem.getLore().join(' ');
-    const messageCount = parseInt(lore.match(/(\d+)\s+messages?/)?.[1] || '0');
-    expect(messageCount).toBeGreaterThanOrEqual(2);
+    const messageItem = gui.locator(i => i.name === 'clock');
+    
+    await expect(messageItem).toHaveLore('messages');
+    
+    const lore = messageItem.loreText();
+    const messageCount = parseInt(lore.match(/(\d+)\s+messages/)?.[1] || '0');
+    expect(messageCount).toBe(2);
 });
+
 test('activity tracking records player commands', async ({ player }: TestContext) => {
     await player.makeOp();
 
@@ -32,21 +25,13 @@ test('activity tracking records player commands', async ({ player }: TestContext
     await player.chat('/list');
 
     await player.chat(`/staffactivity view ${player.username}`);
-    const gui = await player.waitForGui(g =>
-        g.title.includes('Last user activity') &&
-        g.hasItem(i => i.hasLore('commands'))
-    );
+    const gui = await player.gui({ title: /Last user activity/ });
 
-    const commandItem = gui.findItem(i => i.hasLore('commands'));
-
-    if (!commandItem) {
-        throw new Error('Command item not found in GUI');
-    }
-    expect(commandItem).toBeTruthy();
-    expect(commandItem.hasLore('commands')).toBe(true);
-
-    // Verify the count includes our commands
-    const lore = commandItem.getLore().join(' ');
-    const commandCount = parseInt(lore.match(/(\d+)\s+commands?/)?.[1] || '0');
-    expect(commandCount).toBeGreaterThanOrEqual(2);
+    const commandItem = gui.locator(i => i.hasLore('commands'));
+    
+    await expect(commandItem).toHaveLore('commands');
+    
+    const lore = commandItem.loreText();
+    const commandCount = parseInt(lore.match(/(\d+)\s+commands/)?.[1] || '0');
+    expect(commandCount).toBe(2);
 });

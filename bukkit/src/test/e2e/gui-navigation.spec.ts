@@ -54,6 +54,8 @@ test('view command with player name opens player activity', async ({ player }: T
 
     await player.chat('test activity message');
 
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     await player.chat(`/staffactivity view ${player.username}`);
     const gui = await player.gui({ title: /Last user activity/ });
 

@@ -5,6 +5,8 @@ test('activity view shows session entries with timestamps', async ({ player }: T
 
     await player.chat('session test message');
 
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     await player.chat(`/staffactivity view ${player.username}`);
 
     const gui = await player.gui({ title: /Last user activity/ });
@@ -23,6 +25,8 @@ test('clicking activity entry opens detailed view', async ({ player }: TestConte
     await player.chat('detail test message 1');
     await player.chat('/help');
     await player.chat('detail test message 2');
+
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     await player.chat(`/staffactivity view ${player.username}`);
 
@@ -43,6 +47,8 @@ test('clicking activity entry opens detailed view', async ({ player }: TestConte
 test('sort toggle changes activity order', async ({ player }: TestContext) => {
     await player.makeOp();
     await player.chat('sort test message');
+
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     await player.chat(`/staffactivity view ${player.username}`);
 

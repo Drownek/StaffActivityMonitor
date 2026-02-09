@@ -36,6 +36,8 @@ test('report gui shows player rankings with stats', async ({ player }: TestConte
     await player.chat('test message for report');
     await player.chat('/help');
 
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     await player.chat('/staffactivity top');
     const gui = await player.gui({ title: /Activity Report/ });
 
@@ -50,6 +52,7 @@ test('report gui shows player rankings with stats', async ({ player }: TestConte
 
     // Verify at least one stat category exists
     const lore = playerEntry.loreText();
+    console.log("lore: " + lore);
     const hasStats = lore.includes('Time online') ||
         lore.includes('Sessions') ||
         lore.includes('Commands') ||

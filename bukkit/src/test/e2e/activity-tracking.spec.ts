@@ -6,6 +6,8 @@ test('activity tracking records player messages', async ({ player }: TestContext
     await player.chat('Hello this is a test message');
     await player.chat('Another test message for tracking');
 
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     await player.chat(`/staffactivity view ${player.username}`);
     const gui = await player.gui({ title: /Last user activity/ });
 
@@ -23,6 +25,8 @@ test('activity tracking records player commands', async ({ player }: TestContext
 
     await player.chat('/help');
     await player.chat('/list');
+
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     await player.chat(`/staffactivity view ${player.username}`);
     const gui = await player.gui({ title: /Last user activity/ });

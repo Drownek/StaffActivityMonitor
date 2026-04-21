@@ -5,44 +5,17 @@ plugins {
     id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
     id("com.gradleup.shadow") version "9.0.0-beta12"
     id("xyz.jpenilla.run-paper") version "2.3.1"
-    id("io.github.drownek.paper-e2e") version "1.1.0"
+    id("io.github.drownek.paper-e2e") version "1.3.0"
 }
 
 e2e {
     minecraftVersion.set("1.19.4")
-    autoDownloadServer.set(true)
     acceptEula.set(true)
     testsDir.set(file("src/test/e2e"))
-}
 
-val downloadPlaceholderAPI by tasks.registering {
-    val pluginsDir = layout.projectDirectory.dir("run/plugins")
-    val papiJar = pluginsDir.file("PlaceholderAPI.jar")
-    
-    outputs.file(papiJar)
-    
-    doLast {
-        val pluginsDirFile = pluginsDir.asFile
-        if (!pluginsDirFile.exists()) {
-            pluginsDirFile.mkdirs()
-        }
-        
-        val papiFile = papiJar.asFile
-        if (!papiFile.exists()) {
-            val url = uri("https://hangarcdn.papermc.io/plugins/HelpChat/PlaceholderAPI/versions/2.11.6/PAPER/PlaceholderAPI-2.11.6.jar").toURL()
-            println("Downloading PlaceholderAPI...")
-            url.openStream().use { input ->
-                papiFile.outputStream().use { output ->
-                    input.copyTo(output)
-                }
-            }
-            println("PlaceholderAPI downloaded to ${papiFile.absolutePath}")
-        }
+    downloadPlugins {
+        url("https://hangarcdn.papermc.io/plugins/HelpChat/PlaceholderAPI/versions/2.11.6/PAPER/PlaceholderAPI-2.11.6.jar")
     }
-}
-
-tasks.named("testE2E") {
-    dependsOn(downloadPlaceholderAPI)
 }
 
 bukkit {

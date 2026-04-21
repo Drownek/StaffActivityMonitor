@@ -39,3 +39,24 @@ test('activity tracking records player commands', async ({ player }: TestContext
     const commandCount = parseInt(lore.match(/(\d+)\s+commands/)?.[1] || '0');
     expect(commandCount).toBe(2);
 });
+
+test('activity tracking ignores configured commands', async ({ player }: TestContext) => {
+    await player.makeOp();
+
+    await player.chat('/help');
+    await player.chat('/login secretpassword');
+    await player.chat('/register secretpassword secretpassword');
+
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    await player.chat(`/staffactivity view ${player.username}`);
+    const gui = await player.gui({ title: /Last user activity/ });
+
+    const commandItem = gui.locator(i => i.hasLore('commands'));
+
+    await expect(commandItem).toHaveLore('commands');
+
+    const lore = commandItem.loreText();
+    const commandCount = parseInt(lore.match(/(\d+)\s+commands/)?.[1] || '0');
+    expect(commandCount).toBe(1);
+});

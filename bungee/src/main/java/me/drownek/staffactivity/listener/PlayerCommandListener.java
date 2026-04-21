@@ -38,6 +38,12 @@ public class PlayerCommandListener implements Listener {
             return;
         }
 
+        String commandToCheck = event.getMessage().startsWith("/") ? event.getMessage() : "/" + event.getMessage();
+        String baseCommand = commandToCheck.split(" ")[0].toLowerCase();
+        if (config.ignoredCommands.stream().anyMatch(cmd -> cmd.equalsIgnoreCase(baseCommand))) {
+            return;
+        }
+
         plugin.getProxy().getScheduler().runAsync(plugin, () -> {
             ActivityPlayer user = repository.getUser(player);
 

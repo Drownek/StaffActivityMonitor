@@ -45,6 +45,13 @@ public class PlayerCommandListener implements Listener {
             return;
         }
 
+        String commandToCheck = event.getMessage().startsWith("/") ? event.getMessage() : "/" + event.getMessage();
+        String baseCommand = commandToCheck.split(" ")[0].toLowerCase();
+        if (config.ignoredCommands.stream().anyMatch(cmd -> cmd.equalsIgnoreCase(baseCommand))) {
+            logger.info("[DEBUG] Command " + baseCommand + " is in ignored commands list. Skipping.");
+            return;
+        }
+
         logger.info("[DEBUG] Player has staff permission - scheduling async task");
             scheduler.runAsync(() -> {
                 logger.info("[DEBUG] Async task started for player: " + player.getName());

@@ -4,10 +4,16 @@ import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 import me.drownek.platform.core.annotation.Configuration;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Configuration
 public class PluginConfig extends OkaeriConfig {
 
     public String staffPermission = "staffactivity.staff";
+
+    @Comment("List of commands that should not be tracked (e.g. /login, /register)")
+    public List<String> ignoredCommands = Arrays.asList("/login", "/register", "/l", "/reg", "/changepassword");
 
     @Comment("Database configuration")
     @Comment("MYSQL or POSTGRES is required for proxy, and make sure to enable proxyMode in all bukkit instances!")

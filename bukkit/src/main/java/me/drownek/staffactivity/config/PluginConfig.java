@@ -10,6 +10,7 @@ import me.drownek.util.gui.GuiItemInfo;
 import me.drownek.util.gui.GuiSettings;
 import me.drownek.util.gui.PaginatedGuiSettings;
 import org.bukkit.Material;
+import java.util.Arrays;
 
 import java.util.List;
 
@@ -19,6 +20,9 @@ public class PluginConfig extends OkaeriConfig {
 
     @Comment("Permission required to record activity")
     public String staffPermission = "staffactivity.staff";
+
+    @Comment("List of commands that should not be tracked (e.g. /login, /register)")
+    public List<String> ignoredCommands = Arrays.asList("/login", "/register", "/l", "/reg", "/changepassword");
 
     @Comment("View gui list settings (/staffactivity view)")
     public PaginatedGuiSettings viewGuiList = PaginatedGuiSettings.builder()

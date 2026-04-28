@@ -30,56 +30,39 @@ public class PlayerCommandListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     void handle(PlayerCommandPreprocessEvent event) {
-        logger.info("[DEBUG] PlayerCommandListener.handle() called - Command: " + event.getMessage());
-
         if (config.proxyMode) {
-            logger.info("[DEBUG] Skipping command tracking - proxy mode is enabled");
             return;
         }
 
         Player player = event.getPlayer();
-        logger.info("[DEBUG] Player: " + player.getName() + " (UUID: " + player.getUniqueId() + ")");
 
         if (!player.hasPermission(config.staffPermission)) {
-            logger.info("[DEBUG] Player " + player.getName() + " does not have staff permission: " + config.staffPermission);
             return;
         }
 
         String commandToCheck = event.getMessage().startsWith("/") ? event.getMessage() : "/" + event.getMessage();
         String baseCommand = commandToCheck.split(" ")[0].toLowerCase();
         if (config.ignoredCommands.stream().anyMatch(cmd -> cmd.equalsIgnoreCase(baseCommand))) {
-            logger.info("[DEBUG] Command " + baseCommand + " is in ignored commands list. Skipping.");
             return;
         }
 
-        logger.info("[DEBUG] Player has staff permission - scheduling async task");
-            scheduler.runAsync(() -> {
-                logger.info("[DEBUG] Async task started for player: " + player.getName());
+        scheduler.runAsync(() -> {
 
-                    ActivityPlayer user = repository.getUser(player);
-                logger.info("[DEBUG] Retrieved ActivityPlayer for: " + player.getName() + " - Entries count: " + user.getEntries().size());
+            ActivityPlayer user = repository.getUser(player);
 
-                    // Create new entry in case it hadn't been created yet
-                    ActivityEntry activityEntry = activityPlayerService.getUncompletedActivityEntry(user)
-                        .orElseGet(() -> {
-                            logger.info("[DEBUG] Creating new ActivityEntry for player: " + player.getName());
-                                ActivityEntry newEntry = new ActivityEntry(Instant.now());
-                            user.getEntries().add(newEntry);
-                            return newEntry;
-                        });
+            // Create new entry in case it hadn't been created yet
+            ActivityEntry activityEntry = activityPlayerService.getUncompletedActivityEntry(user)
+                    .orElseGet(() -> {
+                        ActivityEntry newEntry = new ActivityEntry(Instant.now());
+                        user.getEntries().add(newEntry);
+                        return newEntry;
+                    });
 
-                if (activityPlayerService.getUncompletedActivityEntry(user).isPresent()) {
-                    logger.info("[DEBUG] Using existing uncompleted ActivityEntry for player: " + player.getName());
-                }
+            String command = event.getMessage().startsWith("/") ? event.getMessage() : "/" + event.getMessage();
 
-                String command = event.getMessage().startsWith("/") ? event.getMessage() : "/" + event.getMessage();
-                    logger.info("[DEBUG] Recording command: " + command);
+            activityEntry.getActions().put(Instant.now().toEpochMilli(), new Action(Instant.now(), ActionType.COMMAND, command));
 
-                        activityEntry.getActions().put(Instant.now().toEpochMilli(), new Action(Instant.now(), ActionType.COMMAND, command));
-                logger.info("[DEBUG] Action added - Total actions in entry: " + activityEntry.getActions().size());
-
-                    user.save();
-                logger.info("[DEBUG] User saved successfully for player: " + player.getName());
-            });
+            user.save();
+        });
     }
 }

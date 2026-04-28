@@ -60,6 +60,8 @@ test('sort toggle changes activity order', async ({ player }: TestContext) => {
 
     await sortToggle.click();
 
+    await new Promise(resolve => setTimeout(resolve, 500));
+
     await expect(sortToggle).toHaveLore('► Oldest to newest');
     await expect(sortToggle).not.toHaveLore('► Newest to oldest');
 });

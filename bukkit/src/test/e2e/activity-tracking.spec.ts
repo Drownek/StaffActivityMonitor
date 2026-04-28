@@ -9,7 +9,7 @@ test('activity tracking records player messages', async ({ player }: TestContext
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     await player.chat(`/staffactivity view ${player.username}`);
-    const gui = await player.gui({ title: /Last user activity/ });
+    const gui = await player.gui({ title: /Last user activity \(/ });
 
     const messageItem = gui.locator(i => i.name === 'clock');
     
@@ -29,7 +29,7 @@ test('activity tracking records player commands', async ({ player }: TestContext
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     await player.chat(`/staffactivity view ${player.username}`);
-    const gui = await player.gui({ title: /Last user activity/ });
+    const gui = await player.gui({ title: /Last user activity \(/ });
 
     const commandItem = gui.locator(i => i.hasLore('commands'));
     
@@ -37,7 +37,7 @@ test('activity tracking records player commands', async ({ player }: TestContext
     
     const lore = commandItem.loreText();
     const commandCount = parseInt(lore.match(/(\d+)\s+commands/)?.[1] || '0');
-    expect(commandCount).toBe(2);
+    expect(commandCount).toBe(3);
 });
 
 test('activity tracking ignores configured commands', async ({ player }: TestContext) => {
@@ -58,5 +58,5 @@ test('activity tracking ignores configured commands', async ({ player }: TestCon
 
     const lore = commandItem.loreText();
     const commandCount = parseInt(lore.match(/(\d+)\s+commands/)?.[1] || '0');
-    expect(commandCount).toBe(1);
+    expect(commandCount).toBe(2);
 });

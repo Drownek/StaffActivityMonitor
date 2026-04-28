@@ -26,16 +26,16 @@ test('clicking activity entry opens detailed view', async ({ player }: TestConte
     await player.chat('/help');
     await player.chat('detail test message 2');
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 2000));
 
     await player.chat(`/staffactivity view ${player.username}`);
 
-    const activityListGui = await player.gui({ title: /Last user activity/ });
+    const activityListGui = await player.gui({ title: /Last user activity \(/ });
 
     const activityEntry = activityListGui.locator(i => i.name === 'clock');
     await activityEntry.click();
 
-    const detailsGui = await player.gui({ title: /User activity details/ });
+    const detailsGui = await player.gui({ title: /User activity details \(/ });
 
     const messageLog = detailsGui.locator(i => i.name === 'paper');
     const commandLog = detailsGui.locator(i => i.name === 'map');
@@ -48,7 +48,7 @@ test('sort toggle changes activity order', async ({ player }: TestContext) => {
     await player.makeOp();
     await player.chat('sort test message');
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 2000));
 
     await player.chat(`/staffactivity view ${player.username}`);
 

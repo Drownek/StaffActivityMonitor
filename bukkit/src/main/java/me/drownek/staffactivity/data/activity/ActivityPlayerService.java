@@ -11,12 +11,19 @@ import org.bukkit.entity.Player;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Component
 public class ActivityPlayerService {
 
     private @Inject PluginConfig config;
     private @Inject ActivityPlayerRepository repository;
+    private final ExecutorService dbThread = Executors.newSingleThreadExecutor();
+
+    public void queueOperation(Runnable runnable) {
+        dbThread.submit(runnable);
+    }
 
     public Optional<ActivityEntry> getUncompletedActivityEntry(ActivityPlayer activityPlayer) {
         return activityPlayer.getEntries().stream()

@@ -44,7 +44,7 @@ public class PlayerCommandListener implements Listener {
             return;
         }
 
-        plugin.getProxy().getScheduler().runAsync(plugin, () -> {
+        activityPlayerService.queueOperation(() -> {
             ActivityPlayer user = repository.getUser(player);
 
             // Create new entry in case it hadn't been created yet

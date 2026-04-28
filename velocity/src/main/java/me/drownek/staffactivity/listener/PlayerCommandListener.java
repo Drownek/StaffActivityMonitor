@@ -41,7 +41,7 @@ public class PlayerCommandListener implements Listener {
             return;
         }
 
-        scheduler.runAsync(() -> {
+        activityPlayerService.queueOperation(() -> {
             ActivityPlayer user = repository.getUser(player);
 
             // Create new entry in case it hadn't been created yet

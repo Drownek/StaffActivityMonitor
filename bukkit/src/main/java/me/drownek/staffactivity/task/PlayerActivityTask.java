@@ -33,9 +33,11 @@ public class PlayerActivityTask implements Runnable {
             return;
         }
 
-        for (OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers()) {
-            processPlayer(offlinePlayer);
-        }
+        activityPlayerService.queueOperation(() -> {
+            for (OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers()) {
+                processPlayer(offlinePlayer);
+            }
+        });
     }
 
     private void processPlayer(OfflinePlayer offlinePlayer) {

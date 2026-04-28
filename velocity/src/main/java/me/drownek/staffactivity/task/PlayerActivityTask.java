@@ -30,15 +30,17 @@ public class PlayerActivityTask implements Runnable {
 
     @Override
     public void run() {
-        for (Player player : proxy.getAllPlayers()) {
-            if (player.hasPermission(config.staffPermission) && !repository.existsByPath(player.getUniqueId())) {
-                repository.findOrCreateByPath(player.getUniqueId());
+        activityPlayerService.queueOperation(() -> {
+            for (Player player : proxy.getAllPlayers()) {
+                if (player.hasPermission(config.staffPermission) && !repository.existsByPath(player.getUniqueId())) {
+                    repository.findOrCreateByPath(player.getUniqueId());
+                }
             }
-        }
 
-        for (ActivityPlayer user : repository.findAll()) {
-            processPlayer(user);
-        }
+            for (ActivityPlayer user : repository.findAll()) {
+                processPlayer(user);
+            }
+        });
     }
 
     private void processPlayer(ActivityPlayer user) {

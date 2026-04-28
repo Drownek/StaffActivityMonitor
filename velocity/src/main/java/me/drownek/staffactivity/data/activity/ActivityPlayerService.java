@@ -10,6 +10,8 @@ import me.drownek.staffactivity.core.ActivityPlayer;
 
 import java.time.Instant;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Component
 public class ActivityPlayerService {
@@ -17,6 +19,11 @@ public class ActivityPlayerService {
     private @Inject PluginConfig config;
     private @Inject ActivityPlayerRepository repository;
     private @Inject ProxyServer proxyServer;
+    private final ExecutorService dbThread = Executors.newSingleThreadExecutor();
+
+    public void queueOperation(Runnable runnable) {
+        dbThread.submit(runnable);
+    }
 
     public Optional<ActivityEntry> getUncompletedActivityEntry(ActivityPlayer activityPlayer) {
         return activityPlayer.getEntries().stream()
